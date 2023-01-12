@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    [SerializeField] float speed;
+    [SerializeField] float speed = 10;
+    [SerializeField] int accelerationFactor = 3;
     [SerializeField] float health = 100;
     [SerializeField] float punchRange = 0.1f;
 
@@ -30,17 +31,20 @@ public class PlayerController : MonoBehaviour
 
     void handleInput()
     {
-        if (Input.GetKey("w") || Input.GetKey("up"))
-            Move(Vector3.forward);
-        
-        if (Input.GetKey("s") || Input.GetKey("down"))
-            Move(Vector3.back);
-  
-        if (Input.GetKey("a") || Input.GetKey("left"))
-            Move(Vector3.left);
+        float speedMultiplier = speed * Time.deltaTime;
+        float moveHorizontally = Input.GetAxis("Horizontal")*speedMultiplier;
+        float moveVertically = Input.GetAxis("Vertical")* speedMultiplier;
 
-        if (Input.GetKey("d") || Input.GetKey("right"))
-            Move(Vector3.right);
+        transform.Translate(moveHorizontally, 0, moveVertically);
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed *= accelerationFactor;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed /= accelerationFactor;
+        }
 
         if (Input.GetKey(KeyCode.Mouse0) || Input.GetKey(KeyCode.Space))
         {
@@ -48,12 +52,6 @@ public class PlayerController : MonoBehaviour
             punch();
         }
     }
-
-    void Move(Vector3 direction)
-    {
-        transform.position += direction * speed * Time.deltaTime;
-    }
-
     void punch()
     {
         // if looking at enemy and enemy is < punchdistance, hit
