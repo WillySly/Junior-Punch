@@ -13,9 +13,7 @@ public class EnemyController : MonoBehaviour
     float movementFactor;
     //float turnSpeed = 10.0f;
     float visualFieldRadius = 5.0f;
-
     Vector3 spawnPosition;
-
     //Flags
     Vector3 moveDirection;
 
