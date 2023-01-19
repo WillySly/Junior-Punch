@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
         if (moveHorizontally != 0 || moveVertically != 0)
         {
             animator.SetBool("isMoving", true);
-            transform.Translate(moveHorizontally, 0, moveVertically);
+            transform.position += new Vector3(moveHorizontally, 0, moveVertically);
         }
         else
         {
