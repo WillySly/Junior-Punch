@@ -202,7 +202,7 @@ public class EnemyController : MonoBehaviour
 
     void EngageInCombat()
     {
-
+        Stop();
     }
 
 }

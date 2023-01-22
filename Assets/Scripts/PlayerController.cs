@@ -12,17 +12,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float dist = 10f;
     Animator animator;
 
-    bool isMoving = false;
-    bool isRunning = false;
-
-
     float cameraMouseDistanceFactor = 3f; // safeguard for mouse/camera overlap
     bool rotate = true; // mouse over player hover flag
 
-    // Lock/Unclock Camera
-
-
-    //Punch an enemy
 
     void Start()
     {
@@ -65,11 +57,6 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isRunning", false);
         }
 
-        if (Input.GetKey(KeyCode.Mouse0) || Input.GetKey(KeyCode.Space))
-        {
-            Debug.Log("PUNCH!");
-            punch();
-        }
     }
 
     // Character spins around uncontrollably when mouse hovers over it,
@@ -104,13 +91,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void punch()
-    {
-        // if looking at enemy and enemy is < punchdistance, hit
-
-
-
-    }
 }
 
 

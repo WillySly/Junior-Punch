@@ -4,15 +4,32 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] int enemyHealth;
+
+    Animator animator;
+
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void gotHit(int points)
     {
-        
+        enemyHealth -= points;
+
+        animator.SetTrigger("isHurt");
+        if (enemyHealth <= 0)
+        {
+            Die();
+        }
     }
+
+    void Die()
+    {
+        Debug.Log("enemy died");
+        animator.SetBool("isDead", true);
+        GetComponent<Collider>().enabled = false;
+        this.enabled = false;
+    }
+
 }

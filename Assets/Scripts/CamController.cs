@@ -12,7 +12,6 @@ public class CamController : MonoBehaviour
     [SerializeField] float sensitivity = 60f;
     [SerializeField] float panSpeed = 20f;
 
-
     bool cameraLocked = true;
     Transform roamingCameraTransform;
     List<CinemachineVirtualCamera> cameras = new List<CinemachineVirtualCamera>();
@@ -20,7 +19,6 @@ public class CamController : MonoBehaviour
 
     float maxFOV = 90f;
     float minFOV = 30f;
-
 
     private void Awake()
     {
