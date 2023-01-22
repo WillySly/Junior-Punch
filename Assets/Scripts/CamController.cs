@@ -15,8 +15,8 @@ public class CamController : MonoBehaviour
 
     bool cameraLocked = true;
     Transform roamingCameraTransform;
-    CinemachineVirtualCamera activeCamera;
     List<CinemachineVirtualCamera> cameras = new List<CinemachineVirtualCamera>();
+    CinemachineVirtualCamera activeCamera;
 
     float maxFOV = 90f;
     float minFOV = 30f;
@@ -26,9 +26,10 @@ public class CamController : MonoBehaviour
     {
         roamingCameraTransform = roamingCamera.VirtualCameraGameObject.transform;
 
-        // Not the optimal way if we have more cameras, but will work this time
+        // Not the optimal way if we have more cameras, but will work for now
         cameras.Add(followingCamera);
         cameras.Add(roamingCamera);
+        SwitchCamera(followingCamera);
     }
 
     private void Update()
@@ -46,7 +47,7 @@ public class CamController : MonoBehaviour
                 float currentFOV = activeCamera.m_Lens.FieldOfView;
                 float targetFOV = currentFOV - scrollWheelAction*sensitivity;
 
-            activeCamera.m_Lens.FieldOfView = Mathf.Clamp(Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime), minFOV, maxFOV);
+                activeCamera.m_Lens.FieldOfView = Mathf.Clamp(Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime), minFOV, maxFOV);
         }
         
     }
@@ -54,7 +55,7 @@ public class CamController : MonoBehaviour
     private Vector3 PanDirection(float x, float z)
     {
         Vector3 direction = Vector3.zero;
-        Debug.Log("Screen height: " + Screen.height + " current mouse z: " + z);
+
         if (z >= Screen.height * .95f)
         {
             direction.z += 1;
@@ -78,15 +79,8 @@ public class CamController : MonoBehaviour
 
     private void PanScreen(float x, float z)
     {
-        Debug.Log("in PanScreen");
-
         Vector3 direction = PanDirection(x, z);
-
-        Debug.Log("Direction is: " + direction);
-
-        Vector3 initpos = roamingCameraTransform.position;
         roamingCameraTransform.position = Vector3.Lerp(roamingCameraTransform.position, roamingCameraTransform.position + direction * panSpeed, Time.deltaTime);
-        //Debug.Log("camera transfor from: " + initpos + " to " + roamingCameraTransform.position);
 
     }
 
