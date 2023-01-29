@@ -40,7 +40,7 @@ public class PlayerCombat : MonoBehaviour
 
         foreach(Collider enemy in enemies)
         {
-            enemy.GetComponent<EnemyHealth>().gotHit(attackDamage);
+            enemy.GetComponent<Health>().gotHit(attackDamage);
             hitEffect.Play();
 
         }

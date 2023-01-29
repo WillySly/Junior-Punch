@@ -20,13 +20,13 @@ public class EnemyCombat : MonoBehaviour
 
 
     EnemyAI ai;
-    EnemyHealth health;
+    Health health;
     Animator animator;
 
     private void Awake()
     {
         ai = GetComponent<EnemyAI>();
-        health = GetComponent<EnemyHealth>();
+        health = GetComponent<Health>();
         animator = GetComponent<Animator>();
 
         engagedInCombat = false;
