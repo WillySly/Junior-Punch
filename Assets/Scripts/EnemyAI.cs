@@ -157,9 +157,11 @@ public class EnemyAI : MonoBehaviour
     void Stop()
     {
         //Debug.Log(Time.time + "STOPPED!");
-
-        navMeshAgent.isStopped = true;
         navMeshAgent.speed = 0;
+        navMeshAgent.isStopped = true;
+        navMeshAgent.velocity = Vector3.zero;
+   
+        
     }
 
     void SetNextWaypoint()
@@ -243,10 +245,14 @@ public class EnemyAI : MonoBehaviour
         }
 
         // if player within attack range, attack
-        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance + enemyCombat.GetAttackRange())
+        if (IsInMeleeRangeOf(target))
+            //navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance + enemyCombat.GetAttackRange())
         {
-            reachedPlayer = true;
+            Debug.Log(Time.time + " current distance " + distanceToTarget);
             Stop();
+            
+            reachedPlayer = true;
+            
             enemyCombat.EngageInCombat();
             //Debug.Log(Time.time + "Engaging");
         }
@@ -263,6 +269,7 @@ public class EnemyAI : MonoBehaviour
 
     private bool IsInMeleeRangeOf(Transform target)
     {
+       
         float distance = Vector3.Distance(transform.position, target.position);
         return distance < enemyCombat.GetAttackRange();
     }

@@ -10,11 +10,12 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask playerLayer;
     [SerializeField] ParticleSystem hitEffect;
+    [SerializeField] float attackAnimationDelay;
 
     enum state { attack, cooldown, notEnagged }
     bool engagedInCombat;
 
-    float  cooldown;
+    float cooldown;
     state currentState;
 
 
@@ -51,13 +52,14 @@ public class EnemyCombat : MonoBehaviour
     void SetState(state state)
     {
         currentState = state;
-        switch (state){
+        switch (state)
+        {
             case state.attack:
                 //Debug.Log("setting to attack");
                 animator.SetTrigger("attack");
 
                 animator.SetBool("isRunning", false);
-               
+
                 break;
             case state.cooldown:
                 //Debug.Log("setting to cooldown");
@@ -81,13 +83,10 @@ public class EnemyCombat : MonoBehaviour
         engagedInCombat = true;
     }
 
-    // FIX: hitEffect is late
     void Attack()
     {
         if (cooldown <= 0)
         {
-            //Debug.Log("attacking");
-
             SetState(state.attack);
             Collider[] target = Physics.OverlapSphere(attackPoint.position, attackRange, playerLayer);
 
@@ -95,22 +94,28 @@ public class EnemyCombat : MonoBehaviour
             {
                 player.GetComponent<PlayerHealth>().gotHit(attackDamage);
                 hitEffect.Play();
-                Debug.Log("hiteffect: " + hitEffect.gameObject.name + "  is playing " + hitEffect.isPlaying);
+                //Debug.Log("hiteffect: " + hitEffect.gameObject.name + "  is playing " + hitEffect.isPlaying);
 
             }
 
             SetState(state.cooldown);
+
+            //StartCoroutine(adjustAttackToAnimation());
+            //Debug.Log("attacking");
+
+          
         }
         else
         {
-            cooldown -= Time.deltaTime; 
+            cooldown -= Time.deltaTime;
         }
-       
-
-       
-       
-
     }
+
+    //public IEnumerator adjustAttackToAnimation()
+    //{
+    //    yield return new WaitForSeconds(attackAnimationDelay);
+       
+    //}
 
 
 
