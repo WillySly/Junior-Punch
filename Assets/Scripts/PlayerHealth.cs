@@ -6,18 +6,33 @@ using UnityEngine.UI;
 
 public class PlayerHealth : Health
 {
-    [SerializeField] float hitAnimationDelay = 0.3f;
+    [SerializeField] float dieAnimationDelay = 5f;
 
     public override void gotHit(int points)
     {
-        StartCoroutine(playAnimation());
+        
         base.gotHit(points);
+
     }
 
-    public IEnumerator playAnimation()
+    public IEnumerator playHitAnimation()
     {
         yield return new WaitForSeconds(hitAnimationDelay);
-        base.animator.SetTrigger("isHurt");
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+        StartCoroutine(playDyingAnimation());
+
+ 
+    }
+
+
+    public IEnumerator playDyingAnimation()
+    {
+        yield return new WaitForSeconds(dieAnimationDelay);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 }

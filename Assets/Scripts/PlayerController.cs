@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float walkingSpeed = 10;
     [SerializeField] int runningFactor = 3;
-    [SerializeField] float health = 100;
     [SerializeField] float punchRange = 0.1f;
     [SerializeField] float dist = 10f;
     Animator animator;

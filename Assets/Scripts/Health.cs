@@ -1,15 +1,18 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cinemachine;
+
 
 public class Health : MonoBehaviour
 {
     [SerializeField] protected int health;
+    [SerializeField] protected float hitAnimationDelay = 0.3f;
     [SerializeField] protected float healthbarAnimationDelay = 0.1f;
     [SerializeField] protected float healthbarUpdateSpeedSeconds = 0.5f;
     [SerializeField] protected Image healthbarForegroundImage;
-
+   
+    protected Transform healthbar;
     protected Animator animator;
     protected int initHealth;
 
@@ -17,29 +20,41 @@ public class Health : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         initHealth = health;
+        healthbar = transform.Find("Healthbar");
     }
 
     public virtual void gotHit(int points)
     {
         health -= points;
-        StartCoroutine(updateHealthbar());
 
-        animator.SetTrigger("isHurt");
+        StartCoroutine(playHitAnimation());
+
         if (health <= 0)
         {
             Die();
         }
     }
 
-    protected void Die()
+    protected virtual void Die()
     {   
         animator.SetBool("isDead", true);
         GetComponent<Collider>().enabled = false;
-        this.enabled = false;
+
+        Transform healthbar = transform.Find("Healthbar");
+ 
+    }
+
+    public IEnumerator playHitAnimation()
+    {
+        yield return new WaitForSeconds(hitAnimationDelay);
+        animator.SetTrigger("isHurt");
+        yield return new WaitForSeconds(healthbarAnimationDelay);
+        StartCoroutine(updateHealthbar());
     }
 
     protected IEnumerator updateHealthbar()
     {
+
         float pct = (float)health / (float)initHealth;
         float currHealth = healthbarForegroundImage.fillAmount;
         float elapsed = 0f;
@@ -52,6 +67,11 @@ public class Health : MonoBehaviour
         }
 
         healthbarForegroundImage.fillAmount = pct;
+    }
+
+    private void LateUpdate()
+    {
+        healthbar.LookAt(Camera.main.transform);
     }
 
 }

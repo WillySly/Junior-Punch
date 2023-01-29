@@ -97,8 +97,6 @@ public class CamController : MonoBehaviour
             if (c != camera)
                 c.Priority = 0;
         }
-
-
     }
 
     private void AdjustRoamingCameraPosition()
