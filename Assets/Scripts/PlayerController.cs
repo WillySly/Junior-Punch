@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleInput()
     {
+
         RotateTowardsMouse();
 
         float speedMultiplier = walkingSpeed * Time.deltaTime;

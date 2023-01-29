@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEditor;
 
 
-[CustomEditor (typeof(EnemyController))]
+[CustomEditor (typeof(EnemyAI))]
 public class FOVEditor : Editor
 {
 
     private void OnSceneGUI()
     {
-        EnemyController fov = (EnemyController)target;
+        EnemyAI fov = (EnemyAI)target;
         Handles.color = Color.white;
 
         Vector3 viewangleA = fov.DirFromAngle(-fov.viewAngle / 2, false);
