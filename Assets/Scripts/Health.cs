@@ -16,7 +16,7 @@ public class Health : MonoBehaviour
     protected Animator animator;
     protected int initHealth;
 
-    void Start()
+    protected virtual void Start()
     {
         animator = GetComponent<Animator>();
         initHealth = health;
@@ -75,5 +75,7 @@ public class Health : MonoBehaviour
     {
         healthbar.LookAt(Camera.main.transform);
     }
+
+
 
 }

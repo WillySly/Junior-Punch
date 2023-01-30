@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] float waitTime = 1.2f;
     [SerializeField] float stopChasingDistance = 25f;
     [SerializeField] float destinationErrorMargin = 3f;
+    [SerializeField] AudioSource walkSound, runSound;
 
     [SerializeField] public float viewRadius;
 
@@ -94,12 +95,18 @@ public class EnemyAI : MonoBehaviour
         switch (state)
         {
             case state.walk:
+                Debug.Log("Here");
+                walkSound.enabled = true;
+                runSound.enabled = false;
+
                 animator.SetBool("isWalking", true);
                 animator.SetBool("isIdle", false);
                 animator.SetBool("isRunning", false);
 
                 break;
             case state.idle:
+                walkSound.enabled = false;
+                runSound.enabled = false;
                 animator.SetBool("isWalking", false);
                 animator.SetBool("isIdle", true);
                 animator.SetBool("isRunning", false);
@@ -110,13 +117,12 @@ public class EnemyAI : MonoBehaviour
                 animator.SetBool("isIdle", false);
                 if (!reachedPlayer)
                 {
-                    //Debug.Log(Time.time + "running animation starting");
+                    walkSound.enabled = false;
+                    runSound.enabled = true;
                     animator.SetBool("isRunning", true);
                 }
                 break;
-            //case state.engagedInCombat:
-            //    animator.SetBool("isRunning", false);
-            //    break;
+ 
             default:
                 animator.SetBool("isWalking", false);
                 animator.SetBool("isIdle", true);
@@ -154,18 +160,14 @@ public class EnemyAI : MonoBehaviour
 
     void Move(float speed)
     {
-        //Debug.Log(Time.time + "in Move: " + speed);
         navMeshAgent.isStopped = false;
         navMeshAgent.speed = speed;
-
-        //Debug.Log(Time.time + " in Move: isStopped is " + navMeshAgent.isStopped + " speed is " + speed );
 
     }
 
 
     void Stop()
     {
-        //Debug.Log(Time.time + "STOPPED!");
         navMeshAgent.speed = 0;
         navMeshAgent.isStopped = true;
         navMeshAgent.velocity = Vector3.zero;
@@ -209,9 +211,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    // FIX: 2.  sometimes it gets stuck in running in one place when the player is near it and doesn't move.
-    //          Moving triggers repositioning of destination and it starts moving towards the player again.
-    //      
+    
 
     public void Chase()
     {
@@ -237,7 +237,6 @@ public class EnemyAI : MonoBehaviour
                 SetState(state.chase);
                 navMeshAgent.SetDestination(target.position);
                 targetLastPosition = target.position;
-                //Debug.Log(Time.time + " Starting movement ");
                 Move(runSpeed);
 
             }
@@ -263,7 +262,6 @@ public class EnemyAI : MonoBehaviour
             reachedPlayer = true;
             
             enemyCombat.EngageInCombat();
-            //Debug.Log(Time.time + "Engaging");
         }
 
     }
@@ -278,7 +276,6 @@ public class EnemyAI : MonoBehaviour
 
     private bool IsInMeleeRangeOf(Transform target)
     {
-       
         float distance = Vector3.Distance(transform.position, target.position);
         return distance < enemyCombat.GetAttackRange();
     }
@@ -295,26 +292,22 @@ public class EnemyAI : MonoBehaviour
     public void AttackEnded()
     {
         canMove = true;
-        //Debug.Log(Time.time + " Attack ended, canMove is true");
     }
 
     public void AttackStarted()
     {
         canMove = false;
-        //Debug.Log(Time.time + " Attack started, canMove is false");
 
     }
 
     public void DamageEnded()
     {
         canMove = true;
-        Debug.Log(Time.time + " Damage ended, canMove is true");
     }
 
     public void DamageStarted()
     {
         canMove = false;
-        Debug.Log(Time.time + " Damage started, canMove is false");
 
     }
 

@@ -9,6 +9,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] Transform attackPoint;
     [SerializeField] ParticleSystem hitEffect;
     [SerializeField] LayerMask enemyLayer;
+    [SerializeField] AudioSource kickSound;
+    [SerializeField] AudioSource[] hitSounds;
 
 
     Animator animator;
@@ -27,6 +29,14 @@ public class PlayerCombat : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space))
         {
+            kickSound.enabled = true;
+            if (!kickSound.enabled)
+            {
+                kickSound.enabled = true;
+            }else
+            {
+                kickSound.Play();
+            }
             Attack();
 
         }
@@ -42,6 +52,17 @@ public class PlayerCombat : MonoBehaviour
         {
             enemy.GetComponent<Health>().gotHit(attackDamage);
             hitEffect.Play();
+
+            int index = Random.Range(0, 2);
+
+            if (!hitSounds[index].enabled)
+            {
+                hitSounds[index].enabled = true;
+            }
+            else
+            {
+                hitSounds[index].Play();
+            }
 
         }
     }

@@ -11,6 +11,8 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] LayerMask playerLayer;
     [SerializeField] ParticleSystem hitEffect;
     [SerializeField] float attackAnimationDelay;
+    [SerializeField] AudioSource reachSound;
+    [SerializeField] AudioSource[] hitSounds;
 
     enum state { attack, cooldown, notEnagged }
     bool engagedInCombat;
@@ -87,6 +89,16 @@ public class EnemyCombat : MonoBehaviour
     {
         if (cooldown <= 0)
         {
+            reachSound.enabled = true;
+            if (!reachSound.enabled)
+            {
+                reachSound.enabled = true;
+            }
+            else
+            {
+                reachSound.Play();
+            }
+
             SetState(state.attack);
             Collider[] target = Physics.OverlapSphere(attackPoint.position, attackRange, playerLayer);
 
@@ -94,16 +106,14 @@ public class EnemyCombat : MonoBehaviour
             {
                 player.GetComponent<PlayerHealth>().gotHit(attackDamage);
                 hitEffect.Play();
-                //Debug.Log("hiteffect: " + hitEffect.gameObject.name + "  is playing " + hitEffect.isPlaying);
 
             }
 
             SetState(state.cooldown);
 
-            //StartCoroutine(adjustAttackToAnimation());
-            //Debug.Log("attacking");
+            StartCoroutine(adjustAttackToAnimation());
 
-          
+
         }
         else
         {
@@ -111,11 +121,23 @@ public class EnemyCombat : MonoBehaviour
         }
     }
 
-    //public IEnumerator adjustAttackToAnimation()
-    //{
-    //    yield return new WaitForSeconds(attackAnimationDelay);
-       
-    //}
+    public IEnumerator adjustAttackToAnimation()
+    {
+        yield return new WaitForSeconds(attackAnimationDelay);
+
+        int index = Random.Range(0, 2);
+
+        if (!hitSounds[index].enabled)
+        {
+            hitSounds[index].enabled = true;
+        }
+        else
+        {
+            hitSounds[index].Play();
+        }
+
+
+    }
 
 
 

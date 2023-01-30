@@ -9,7 +9,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int runningFactor = 3;
     [SerializeField] float punchRange = 0.1f;
     [SerializeField] float dist = 10f;
+    [SerializeField] AudioSource walkSound, runSound;
+
     Animator animator;
+
 
     float cameraMouseDistanceFactor = 3f; // safeguard for mouse/camera overlap
     bool rotate = true; // mouse over player hover flag
@@ -40,21 +43,28 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("isMoving", true);
             transform.position += new Vector3(moveHorizontally, 0, moveVertically);
+            walkSound.enabled = true;
         }
         else
         {
             animator.SetBool("isMoving", false);
+            walkSound.enabled = false;
+
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             walkingSpeed *= runningFactor;
             animator.SetBool("isRunning", true);
+            walkSound.enabled = false;
+            runSound.enabled = true;
+
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             walkingSpeed /= runningFactor;
             animator.SetBool("isRunning", false);
+            runSound.enabled = false;
         }
 
     }
