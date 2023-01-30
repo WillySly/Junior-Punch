@@ -67,6 +67,8 @@ public class Health : MonoBehaviour
         }
 
         healthbarForegroundImage.fillAmount = pct;
+        animator.ResetTrigger("isHurt");
+
     }
 
     private void LateUpdate()

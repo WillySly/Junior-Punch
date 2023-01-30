@@ -75,11 +75,7 @@ public class EnemyAI : MonoBehaviour
 
     public void SetWaypoints(List<Transform> wp)
     {
-        Debug.Log("setting waypoints");
         waypoints = wp;
-
-        foreach (Transform wpd in waypoints)
-            Debug.Log("Waypoijts list " + wpd.position);
     }
 
     public Vector3 DirFromAngle(float angle, bool angleIsGlobal)
@@ -262,7 +258,6 @@ public class EnemyAI : MonoBehaviour
         if (IsInMeleeRangeOf(target))
             //navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance + enemyCombat.GetAttackRange())
         {
-            Debug.Log(Time.time + " current distance " + distanceToTarget);
             Stop();
             
             reachedPlayer = true;
@@ -307,6 +302,19 @@ public class EnemyAI : MonoBehaviour
     {
         canMove = false;
         //Debug.Log(Time.time + " Attack started, canMove is false");
+
+    }
+
+    public void DamageEnded()
+    {
+        canMove = true;
+        Debug.Log(Time.time + " Damage ended, canMove is true");
+    }
+
+    public void DamageStarted()
+    {
+        canMove = false;
+        Debug.Log(Time.time + " Damage started, canMove is false");
 
     }
 

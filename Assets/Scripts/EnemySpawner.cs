@@ -12,10 +12,8 @@ public class EnemySpawner : ScriptableObject
     GameObject enemyInstance;
 
     float spawnDelay = 10f;
-    float timer;
+    float timer = 0f;
     List<Transform> waypointList = new List<Transform>();
-
-
 
     public void SetEnemyType(GameObject enemyType)
     {
@@ -48,18 +46,23 @@ public class EnemySpawner : ScriptableObject
         foreach (Transform child in waypoints)
         {
             waypointList.Add(child);
-            Debug.Log("Added " + child.position);
         }
 
     }
 
     public void spawnEnemy()
     {
-        enemyInstance = Instantiate(enemyPrefab, new Vector3(xPos, floorLevel, zPos), Quaternion.identity);
+        if (timer <= 0)
+        {
+            enemyInstance = Instantiate(enemyPrefab, new Vector3(xPos, floorLevel, zPos), Quaternion.identity);
+            enemyInstance.GetComponent<EnemyAI>().SetWaypoints(waypointList);
+            timer = spawnDelay;
+        }
+    }
 
-        foreach (Transform wpd in waypointList)
-            Debug.Log("in spawn: Waypoints list " + wpd.position);
-        enemyInstance.GetComponent<EnemyAI>().SetWaypoints(waypointList);
+    public void decreaseTimer(float delta)
+    {
+        timer -= delta;
     }
 
     public bool enemyIsDead()

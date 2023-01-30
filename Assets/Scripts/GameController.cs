@@ -24,8 +24,6 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-
-        Debug.Log("Gamecontroller: started");
         // create spawner for each room
 
         EnemySpawner centralRoomSpawner = ScriptableObject.CreateInstance("EnemySpawner") as EnemySpawner;
@@ -56,8 +54,6 @@ public class GameController : MonoBehaviour
             spawner.SetEnemyType(enemyPrefab);
             spawner.spawnEnemy();
         }
-
-
     }
 
     void Update()
@@ -66,7 +62,8 @@ public class GameController : MonoBehaviour
         {
             if (spawner.enemyIsDead())
             {
-                
+                spawner.decreaseTimer(Time.deltaTime);
+                spawner.spawnEnemy();
             }
         }
     }

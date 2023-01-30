@@ -3038,6 +3038,7 @@ MonoBehaviour:
   healthbarAnimationDelay: 0.1
   healthbarUpdateSpeedSeconds: 0.5
   healthbarForegroundImage: {fileID: 8558471225460132395}
+  dieAnimationDelay: 1
 --- !u!1 &7911724690802240393
 GameObject:
   m_ObjectHideFlags: 0
