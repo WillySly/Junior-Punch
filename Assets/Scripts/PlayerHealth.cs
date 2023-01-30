@@ -22,7 +22,12 @@ public class PlayerHealth : Health
 
     protected override void Die()
     {
+        PlayerController pc = GetComponent<PlayerController>();
+        pc.enabled = false;
+        PlayerCombat pcombat = GetComponent<PlayerCombat>();
+        pcombat.enabled = false;
         base.Die();
+
         StartCoroutine(playDyingAnimation());
 
  

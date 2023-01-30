@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] Transform target;
-    [SerializeField] Transform[] waypoints;
     [SerializeField] LayerMask playerMask;
     [SerializeField] LayerMask obstacleMask;
 
@@ -18,9 +16,13 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] float destinationErrorMargin = 3f;
 
     [SerializeField] public float viewRadius;
+
     [Range(0, 360)]
     [SerializeField] public float viewAngle;
 
+
+    List<Transform> waypoints;
+    Transform target;
     enum state { walk, idle, chase, engagedInCombat }
 
     NavMeshAgent navMeshAgent;
@@ -41,12 +43,13 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
+        target = GameObject.FindGameObjectWithTag("Player").transform;
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         enemyCombat = GetComponent<EnemyCombat>();
 
         destinationWaypointIndex = 0;
-        navMeshAgent.SetDestination(waypoints[destinationWaypointIndex].position);
+        //navMeshAgent.SetDestination(waypoints[destinationWaypointIndex].position);
         navMeshAgent.autoBraking = true;
         navMeshAgent.stoppingDistance = destinationErrorMargin;
         reachedPlayer = false;
@@ -56,6 +59,7 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         //Debug.Log(Time.time + " EnemyAI: currentState " + currentState);
+
 
         CheckEnvironment();
 
@@ -67,6 +71,15 @@ public class EnemyAI : MonoBehaviour
         {
             Patroling();
         }
+    }
+
+    public void SetWaypoints(List<Transform> wp)
+    {
+        Debug.Log("setting waypoints");
+        waypoints = wp;
+
+        foreach (Transform wpd in waypoints)
+            Debug.Log("Waypoijts list " + wpd.position);
     }
 
     public Vector3 DirFromAngle(float angle, bool angleIsGlobal)
@@ -167,8 +180,12 @@ public class EnemyAI : MonoBehaviour
     void SetNextWaypoint()
     {
         destinationWaypointIndex++;
-        destinationWaypointIndex %= waypoints.Length;
-        navMeshAgent.SetDestination(waypoints[destinationWaypointIndex].position);
+        if (waypoints.Count != 0)
+        {
+            destinationWaypointIndex %= waypoints.Count;
+            navMeshAgent.SetDestination(waypoints[destinationWaypointIndex].position);
+        }
+
     }
 
 
@@ -196,10 +213,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    // FIX: 1.  After hitting the player, if player moves enemy turns and slides for some time before
-    //          running animation starts. Animation is triggered correctly, all the flags are set.
-    //
-    //      2.  sometimes it gets stuck in running in one place when the player is near it and doesn't move.
+    // FIX: 2.  sometimes it gets stuck in running in one place when the player is near it and doesn't move.
     //          Moving triggers repositioning of destination and it starts moving towards the player again.
     //      
 
