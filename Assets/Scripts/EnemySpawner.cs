@@ -12,7 +12,7 @@ public class EnemySpawner : ScriptableObject
     GameObject enemyInstance;
 
     float spawnDelay = 10f;
-    float timer = 0f;
+    float timer = 0f;       // respawns timer
     List<Transform> waypointList = new List<Transform>();
 
     public void SetEnemyType(GameObject enemyType)
@@ -20,9 +20,10 @@ public class EnemySpawner : ScriptableObject
         enemyPrefab = enemyType;
     }
 
+    // Provided the 4 coordinates of the room spows enemy at random point
+    // in the room. Checks for collisions with environment. 
     public void SetDimensions(float minX, float maxX, float minZ, float maxZ)
     {
-
         LayerMask obstaclesLayer = LayerMask.GetMask("Obstacles");
         LayerMask propsLayer = LayerMask.GetMask("Props");
 
@@ -40,7 +41,7 @@ public class EnemySpawner : ScriptableObject
 
     }
 
-
+    // Waypoints are different for each instance
     public void SetWaypoints(Transform waypoints)
     {
         foreach (Transform child in waypoints)
@@ -60,6 +61,7 @@ public class EnemySpawner : ScriptableObject
         }
     }
 
+    // Decrease respawn timer
     public void decreaseTimer(float delta)
     {
         timer -= delta;

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using Cinemachine;
 
 
+// Parent class for all things health related
+
 public class Health : MonoBehaviour
 {
     [SerializeField] protected int health;
@@ -23,38 +25,14 @@ public class Health : MonoBehaviour
         healthbar = transform.Find("Healthbar");
     }
 
-    public virtual void gotHit(int points)
-    {
-        health -= points;
-
-        StartCoroutine(playHitAnimation());
-
-        if (health <= 0)
-        {
-            Die();
-        }
-    }
-
     protected virtual void Die()
-    {   
+    {
         animator.SetBool("isDead", true);
         GetComponent<Collider>().enabled = false;
-
-        Transform healthbar = transform.Find("Healthbar");
- 
-    }
-
-    public IEnumerator playHitAnimation()
-    {
-        yield return new WaitForSeconds(hitAnimationDelay);
-        animator.SetTrigger("isHurt");
-        yield return new WaitForSeconds(healthbarAnimationDelay);
-        StartCoroutine(updateHealthbar());
     }
 
     protected IEnumerator updateHealthbar()
     {
-
         float pct = (float)health / (float)initHealth;
         float currHealth = healthbarForegroundImage.fillAmount;
         float elapsed = 0f;
@@ -68,10 +46,31 @@ public class Health : MonoBehaviour
 
         healthbarForegroundImage.fillAmount = pct;
         animator.ResetTrigger("isHurt");
-
     }
 
-    private void LateUpdate()
+    public virtual void gotHit(int points)
+    {
+        health -= points;
+
+        // Animations are not synced with logic, so we make them wait
+        StartCoroutine(playHitAnimation());
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    IEnumerator playHitAnimation()
+    {
+        yield return new WaitForSeconds(hitAnimationDelay);
+        animator.SetTrigger("isHurt");
+        yield return new WaitForSeconds(healthbarAnimationDelay);
+        StartCoroutine(updateHealthbar());
+    }
+
+
+    void LateUpdate()
     {
         healthbar.LookAt(Camera.main.transform);
     }

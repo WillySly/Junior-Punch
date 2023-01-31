@@ -8,25 +8,19 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] int attackDamage = 20;
     [SerializeField] Transform attackPoint;
     [SerializeField] ParticleSystem hitEffect;
-    [SerializeField] LayerMask enemyLayer;
     [SerializeField] AudioSource kickSound;
-    [SerializeField] AudioSource[] hitSounds;
-
+    [SerializeField] AudioSource[] hitSounds;  // Hit sounds to choose randomly from during combat
+    [SerializeField] LayerMask enemyLayer;
 
     Animator animator;
 
-    bool isAlive;
-
-    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space))
         {
             kickSound.enabled = true;
@@ -38,7 +32,6 @@ public class PlayerCombat : MonoBehaviour
                 kickSound.Play();
             }
             Attack();
-
         }
     }
 
@@ -62,7 +55,6 @@ public class PlayerCombat : MonoBehaviour
             {
                 hitSounds[index].Play();
             }
-
         }
     }
 

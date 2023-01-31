@@ -19,7 +19,6 @@ public class GameController : MonoBehaviour
     // ladder room dimensions
     float lrMinX = -28f, lrMaxX = 46f, lrMinZ = -45f, lrMaxZ = -10f;
 
-
     List<EnemySpawner> spawners = new List<EnemySpawner>();
 
     void Start()
@@ -29,7 +28,6 @@ public class GameController : MonoBehaviour
         EnemySpawner centralRoomSpawner = ScriptableObject.CreateInstance("EnemySpawner") as EnemySpawner;
         centralRoomSpawner.SetDimensions(crMinX, crMaxX, crMinZ, crMaxZ);
         centralRoomSpawner.SetWaypoints(patrolWaypoints.Find("CentralRoom"));
-
 
         EnemySpawner tableRoomSpawner = ScriptableObject.CreateInstance("EnemySpawner") as EnemySpawner; ;
         tableRoomSpawner.SetDimensions(trMinX, trMaxX, trMinZ, trMaxZ);

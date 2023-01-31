@@ -6451,6 +6451,7 @@ MonoBehaviour:
   runningFactor: 2
   punchRange: 2
   dist: 10
+  name: {fileID: 8493704948224446101}
   walkSound: {fileID: 0}
   runSound: {fileID: 0}
 --- !u!114 &2506745891054144280
@@ -7758,3 +7759,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 701770569972339697, guid: d7ef5caa92bf75942ba54d3e3fbfad38, type: 3}
   m_PrefabInstance: {fileID: 6349356322070279061}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8493704948224446101 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3297411497462103296, guid: d7ef5caa92bf75942ba54d3e3fbfad38, type: 3}
+  m_PrefabInstance: {fileID: 6349356322070279061}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

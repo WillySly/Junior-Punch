@@ -9,14 +9,13 @@ public class GameOver : MonoBehaviour
 {
     string finalText = "Overconfidence is a slow and insidious killer...\n\nESC - to quit     SPACE - to continue";
 
-    // Start is called before the first frame update
     void Start()
     {
         TMP_Text gameOverText = GetComponent<TMP_Text>();
         gameOverText.text = finalText;
     }
 
-    private void Update()
+    void Update()
     {
         if (Input.GetKey(KeyCode.Space))
         {
@@ -27,9 +26,7 @@ public class GameOver : MonoBehaviour
         {
             Application.Quit();
         }
-
     }
 
 }
 
-// Update is called once per frame

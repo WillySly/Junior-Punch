@@ -14,34 +14,29 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] float waitTime = 1.2f;
     [SerializeField] float stopChasingDistance = 25f;
     [SerializeField] float destinationErrorMargin = 3f;
-    [SerializeField] AudioSource walkSound, runSound;
-
     [SerializeField] public float viewRadius;
-
     [Range(0, 360)]
     [SerializeField] public float viewAngle;
 
+    [SerializeField] AudioSource walkSound, runSound;
 
     List<Transform> waypoints;
     Transform target;
-    enum state { walk, idle, chase, engagedInCombat }
+    enum state { walk, idle, chase}
+    state currentState;
 
     NavMeshAgent navMeshAgent;
     Animator animator;
     EnemyCombat enemyCombat;
 
-
     int destinationWaypointIndex;
-    
     float rotationSpeed = 10f;
 
     bool reachedPlayer;
-    bool canMove = true;
-    bool canAttack = true;
-    Vector3 targetLastPosition;
-    state currentState;
+    bool canMove = true;        // to start moving only if animation damage or attack is finished
+    bool canAttack = true;      // to make sure the attack doesn't start before damage animation is finished
 
-
+    Vector3 targetLastPosition; // to check whether player moved
 
     void Start()
     {
@@ -71,21 +66,30 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public void SetWaypoints(List<Transform> wp)
+    void CheckEnvironment()
     {
-        waypoints = wp;
-    }
+        Collider[] targetsInView = Physics.OverlapSphere(transform.position, viewRadius, playerMask);
 
-    public Vector3 DirFromAngle(float angle, bool angleIsGlobal)
-    {
-        if (!angleIsGlobal)
+        for (int i = 0; i < targetsInView.Length; i++)
         {
-            angle += transform.eulerAngles.y;
-        }
-        return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
+            Transform target = targetsInView[i].transform;
+            Vector3 directionToTarget = (target.position - transform.position).normalized;
 
+            if (Vector3.Angle(transform.forward, directionToTarget) < viewAngle / 2)
+            {
+                float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
+                {
+                    SetState(state.chase);
+                }
+
+            }
+        }
     }
 
+
+    // Handles SFX and AFX 
     void SetState(state state)
     {
         currentState = state;
@@ -118,7 +122,7 @@ public class EnemyAI : MonoBehaviour
                     animator.SetBool("isRunning", true);
                 }
                 break;
- 
+
             default:
                 animator.SetBool("isWalking", false);
                 animator.SetBool("isIdle", true);
@@ -126,90 +130,9 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    state GetCurrentState()
-    {
-        return currentState;
-    }
-
-
-
-    void Patroling()
-    {
-        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-        {
-            if (idleCounter <= 0)
-            {
-                SetNextWaypoint();
-                Move(speed);
-                SetState(state.walk);
-                idleCounter = waitTime;
-            }
-            else
-            {
-                Stop();
-                idleCounter -= Time.deltaTime;
-                SetState(state.idle);
-
-            }
-        }
-    }
-
-    void Move(float speed)
-    {
-        navMeshAgent.isStopped = false;
-        navMeshAgent.speed = speed;
-
-    }
-
-
-    void Stop()
-    {
-        navMeshAgent.speed = 0;
-        navMeshAgent.isStopped = true;
-        navMeshAgent.velocity = Vector3.zero;
-   
-        
-    }
-
-    void SetNextWaypoint()
-    {
-        destinationWaypointIndex++;
-        if (waypoints.Count != 0)
-        {
-            destinationWaypointIndex %= waypoints.Count;
-            navMeshAgent.SetDestination(waypoints[destinationWaypointIndex].position);
-        }
-
-    }
-
-
-    void CheckEnvironment()
-    {
-        Collider[] targetsInView = Physics.OverlapSphere(transform.position, viewRadius, playerMask);
-
-        for (int i = 0; i < targetsInView.Length; i++)
-        {
-            Transform target = targetsInView[i].transform;
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
-
-            if (Vector3.Angle(transform.forward, directionToTarget) < viewAngle / 2)
-            {
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
-                {
-                    SetState(state.chase);
-                }
-
-            }
-        }
-    }
-
-    
 
     public void Chase()
     {
-
         if (IsInMeleeRangeOf(target))
         {
             RotateTowards(target);
@@ -223,16 +146,15 @@ public class EnemyAI : MonoBehaviour
 
         if (!reachedPlayer)
         {
-            //Debug.Log(Time.time + " Player not reached, can move is " + canMove);
             // if in attack animation, wait for animation to stop and chase again
             // if attack didn't happen yet, canMove is set to true by default
+
             if (canMove)
             {
                 SetState(state.chase);
                 navMeshAgent.SetDestination(target.position);
                 targetLastPosition = target.position;
                 Move(runSpeed);
-
             }
         }
 
@@ -253,15 +175,55 @@ public class EnemyAI : MonoBehaviour
             if (canAttack)
             {
                 Stop();
-
                 reachedPlayer = true;
-
                 enemyCombat.EngageInCombat();
             }
+        }
+    }
 
+    void Patroling()
+    {
+        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        {
+            if (idleCounter <= 0)
+            {
+                SetNextWaypoint();
+                Move(speed);
+                SetState(state.walk);
+                idleCounter = waitTime;
+            }
+            else
+            {
+                Stop();
+                idleCounter -= Time.deltaTime;
+                SetState(state.idle);
+            }
+        }
+    }
+
+    void Move(float speed)
+    {
+        navMeshAgent.isStopped = false;
+        navMeshAgent.speed = speed;
+    }   
+
+    void Stop()
+    {
+        navMeshAgent.speed = 0;
+        navMeshAgent.isStopped = true;
+        navMeshAgent.velocity = Vector3.zero;       
+    }
+
+    void SetNextWaypoint()
+    {
+        destinationWaypointIndex++;
+        if (waypoints.Count != 0)
+        {
+            destinationWaypointIndex %= waypoints.Count;
+            navMeshAgent.SetDestination(waypoints[destinationWaypointIndex].position);
         }
 
-    }
+    }  
 
     void ReturnToPost()
     {
@@ -270,33 +232,33 @@ public class EnemyAI : MonoBehaviour
         navMeshAgent.SetDestination(waypoints[destinationWaypointIndex].position);
     }
 
-
-    private bool IsInMeleeRangeOf(Transform target)
+    bool IsInMeleeRangeOf(Transform target)
     {
         float distance = Vector3.Distance(transform.position, target.position);
         return distance < enemyCombat.GetAttackRange();
     }
 
-    private void RotateTowards(Transform target)
+    void RotateTowards(Transform target)
     {
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 
+    public void SetWaypoints(List<Transform> wp)
+    {
+        waypoints = wp;
+    }
 
     // catches attack animation ending event. Enemy must not move during attack
     public void AttackEnded()
     {
         canMove = true;
-
     }
 
     public void AttackStarted()
     {
         canMove = false;
-
-
     }
 
     public void DamageEnded()
@@ -310,6 +272,16 @@ public class EnemyAI : MonoBehaviour
         canMove = false;
         canAttack = false;
     }
+
+    public Vector3 DirFromAngle(float angle, bool angleIsGlobal)
+    {
+        if (!angleIsGlobal)
+        {
+            angle += transform.eulerAngles.y;
+        }
+        return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
+    }
+
 
 
 }

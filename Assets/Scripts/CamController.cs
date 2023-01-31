@@ -10,7 +10,7 @@ public class CamController : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera roamingCamera;
 
     [SerializeField] float sensitivity = 60f;
-    [SerializeField] float panSpeed = 20f;
+    [SerializeField] float panSpeed = 20f;  // when camera unlocked
 
     bool cameraLocked = true;
     Transform roamingCameraTransform;
@@ -80,11 +80,6 @@ public class CamController : MonoBehaviour
         Vector3 direction = PanDirection(x, z);
         roamingCameraTransform.position = Vector3.Lerp(roamingCameraTransform.position, roamingCameraTransform.position + direction * panSpeed, Time.deltaTime);
 
-    }
-
-    private bool IsActiveCamera(CinemachineVirtualCamera camera)
-    {
-        return camera == activeCamera;
     }
 
     private void SwitchCamera(CinemachineVirtualCamera camera)

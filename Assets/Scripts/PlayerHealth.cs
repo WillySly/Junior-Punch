@@ -20,19 +20,6 @@ public class PlayerHealth : Health
         healthText.text = "HP: " + health.ToString();
     }
 
-    public override void gotHit(int points)
-    {
-        base.gotHit(points);
-        StartCoroutine(ScoreAnimationDelay());
-    }
-
-    IEnumerator ScoreAnimationDelay()
-    {
-        yield return new WaitForSeconds(hitAnimationDelay + healthbarAnimationDelay);
-        healthText.text = healthText.text = "HP: " + health.ToString();
-    }
-
-
     protected override void Die()
     {
         PlayerController pc = GetComponent<PlayerController>();
@@ -44,12 +31,26 @@ public class PlayerHealth : Health
         StartCoroutine(PlayDyingAnimation());
     }
 
-    public IEnumerator PlayDyingAnimation()
+    public override void gotHit(int points)
+    {
+        base.gotHit(points);
+        StartCoroutine(ScoreAnimationDelay());
+    }
+    IEnumerator PlayDyingAnimation()
     {
         yield return new WaitForSeconds(dieAnimationDelay);
         gameOverCanvas.SetActive(true);
 
     }
+
+    IEnumerator ScoreAnimationDelay()
+    {
+        yield return new WaitForSeconds(hitAnimationDelay + healthbarAnimationDelay);
+        healthText.text = healthText.text = "HP: " + health.ToString();
+    }
+
+
+   
 
  
 

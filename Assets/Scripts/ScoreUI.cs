@@ -6,7 +6,6 @@ using TMPro;
 
 public class ScoreUI : MonoBehaviour
 {
-
     int score = 0;
     TMP_Text scoreText;
 

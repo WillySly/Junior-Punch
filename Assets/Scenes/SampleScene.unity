@@ -14108,6 +14108,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4281817650431037186, guid: 7a89c72c01f4d8c4796bc426fe28bf40, type: 3}
   m_PrefabInstance: {fileID: 1013940802}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1972165813 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8493704948224446101, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
+  m_PrefabInstance: {fileID: 7636837973348464078}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1972462030 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3951424495242864794, guid: 725d9061657be724facf6fda9fe05b4f, type: 3}
@@ -16069,6 +16080,10 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2476309686990783081, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2506745891054144280, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
       propertyPath: kickSound
       value: 
@@ -16093,6 +16108,10 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3451801452719016280, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
+      propertyPath: m_Name
+      value: PlayerName
+      objectReference: {fileID: 0}
     - target: {fileID: 5416853265524529200, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
       propertyPath: m_Name
       value: Player
@@ -16101,6 +16120,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5879890477837972460, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
+      propertyPath: charName
+      value: 
+      objectReference: {fileID: 1972165813}
     - target: {fileID: 5879890477837972460, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
       propertyPath: runSound
       value: 

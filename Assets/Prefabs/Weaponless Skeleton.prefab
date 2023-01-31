@@ -4008,7 +4008,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 84
-  m_CollisionDetection: 3
+  m_CollisionDetection: 2
 --- !u!136 &8558471226208664293
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4047,10 +4047,10 @@ MonoBehaviour:
   waitTime: 2
   stopChasingDistance: 25
   destinationErrorMargin: 4
-  walkSound: {fileID: 6979265270231882893}
-  runSound: {fileID: 3711592505006203203}
   viewRadius: 20
   viewAngle: 117
+  walkSound: {fileID: 6979265270231882893}
+  runSound: {fileID: 3711592505006203203}
 --- !u!195 &8558471226208664296
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4085,15 +4085,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b4e5d6a18c7f0947b0de08cf6d2950f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackRange: 4
   attackDamage: 20
+  attackRange: 4
   attackCooldownTime: 2
+  attackAnimationDelay: 0.1
   attackPoint: {fileID: 8558471227061471768}
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
   hitEffect: {fileID: 6380678943087673816}
-  attackAnimationDelay: 0.1
   reachSound: {fileID: 7177877195797391141}
   hitSounds:
   - {fileID: 610753623268837156}
