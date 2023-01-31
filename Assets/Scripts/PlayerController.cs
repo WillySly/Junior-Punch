@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
     float cameraMouseDistanceFactor = 3f; // safeguard for mouse/camera overlap
     bool rotate = true; // mouse over player hover flag
 
-
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -31,7 +30,6 @@ public class PlayerController : MonoBehaviour
 
     void HandleInput()
     {
-
         RotateTowardsMouse();
 
         float speedMultiplier = walkingSpeed * Time.deltaTime;
@@ -80,10 +78,9 @@ public class PlayerController : MonoBehaviour
     private void OnMouseExit()
     {
         rotate = true;
+
     }
 
-
-    // 
     private void RotateTowardsMouse()
     {
         // check for mouse hover

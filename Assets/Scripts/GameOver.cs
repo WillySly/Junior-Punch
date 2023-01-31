@@ -25,7 +25,6 @@ public class GameOver : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Escape))
         {
-            Debug.Log("escape");
             Application.Quit();
         }
 

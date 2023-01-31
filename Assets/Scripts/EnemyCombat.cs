@@ -38,10 +38,8 @@ public class EnemyCombat : MonoBehaviour
     private void Update()
     {
 
-        //Debug.Log(Time.time + " EnemyCombat: currentState " + currentState);
         if (engagedInCombat)
         {
-
             Attack();
             engagedInCombat = false;
         }
@@ -57,16 +55,11 @@ public class EnemyCombat : MonoBehaviour
         switch (state)
         {
             case state.attack:
-                //Debug.Log("setting to attack");
                 animator.SetTrigger("attack");
-
                 animator.SetBool("isRunning", false);
-
                 break;
             case state.cooldown:
-                //Debug.Log("setting to cooldown");
                 cooldown = attackCooldownTime;
-
                 break;
             case state.notEnagged:
                 animator.ResetTrigger("attack");
@@ -107,6 +100,7 @@ public class EnemyCombat : MonoBehaviour
                 player.GetComponent<PlayerHealth>().gotHit(attackDamage);
                 hitEffect.Play();
 
+
             }
 
             SetState(state.cooldown);
@@ -124,7 +118,7 @@ public class EnemyCombat : MonoBehaviour
     public IEnumerator adjustAttackToAnimation()
     {
         yield return new WaitForSeconds(attackAnimationDelay);
-
+        
         int index = Random.Range(0, 2);
 
         if (!hitSounds[index].enabled)

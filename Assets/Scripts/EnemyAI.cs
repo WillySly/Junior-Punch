@@ -37,6 +37,7 @@ public class EnemyAI : MonoBehaviour
 
     bool reachedPlayer;
     bool canMove = true;
+    bool canAttack = true;
     Vector3 targetLastPosition;
     state currentState;
 
@@ -50,7 +51,6 @@ public class EnemyAI : MonoBehaviour
         enemyCombat = GetComponent<EnemyCombat>();
 
         destinationWaypointIndex = 0;
-        //navMeshAgent.SetDestination(waypoints[destinationWaypointIndex].position);
         navMeshAgent.autoBraking = true;
         navMeshAgent.stoppingDistance = destinationErrorMargin;
         reachedPlayer = false;
@@ -59,9 +59,6 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log(Time.time + " EnemyAI: currentState " + currentState);
-
-
         CheckEnvironment();
 
         if (currentState == state.chase)
@@ -95,7 +92,6 @@ public class EnemyAI : MonoBehaviour
         switch (state)
         {
             case state.walk:
-                Debug.Log("Here");
                 walkSound.enabled = true;
                 runSound.enabled = false;
 
@@ -202,8 +198,6 @@ public class EnemyAI : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
                 {
-                    //Debug.Log(Time.time + " PLAYER IS HERE");
-
                     SetState(state.chase);
                 }
 
@@ -255,13 +249,16 @@ public class EnemyAI : MonoBehaviour
 
         // if player within attack range, attack
         if (IsInMeleeRangeOf(target))
-            //navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance + enemyCombat.GetAttackRange())
         {
-            Stop();
-            
-            reachedPlayer = true;
-            
-            enemyCombat.EngageInCombat();
+            if (canAttack)
+            {
+                Stop();
+
+                reachedPlayer = true;
+
+                enemyCombat.EngageInCombat();
+            }
+
         }
 
     }
@@ -292,23 +289,26 @@ public class EnemyAI : MonoBehaviour
     public void AttackEnded()
     {
         canMove = true;
+
     }
 
     public void AttackStarted()
     {
         canMove = false;
 
+
     }
 
     public void DamageEnded()
     {
         canMove = true;
+        canAttack = true;
     }
 
     public void DamageStarted()
     {
         canMove = false;
-
+        canAttack = false;
     }
 
 

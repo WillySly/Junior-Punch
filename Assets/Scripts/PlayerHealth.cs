@@ -24,14 +24,12 @@ public class PlayerHealth : Health
     {
         base.gotHit(points);
         StartCoroutine(ScoreAnimationDelay());
-
     }
 
     IEnumerator ScoreAnimationDelay()
     {
         yield return new WaitForSeconds(hitAnimationDelay + healthbarAnimationDelay);
         healthText.text = healthText.text = "HP: " + health.ToString();
-
     }
 
 
@@ -44,7 +42,6 @@ public class PlayerHealth : Health
         base.Die();
         deathSound.enabled = true;
         StartCoroutine(PlayDyingAnimation());
-
     }
 
     public IEnumerator PlayDyingAnimation()

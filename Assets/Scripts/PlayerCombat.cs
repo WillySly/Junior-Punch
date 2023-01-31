@@ -44,7 +44,6 @@ public class PlayerCombat : MonoBehaviour
 
     void Attack()
     {
-
         animator.SetTrigger("attack");
         Collider[] enemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
 
