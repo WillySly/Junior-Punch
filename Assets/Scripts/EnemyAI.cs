@@ -118,7 +118,8 @@ public class EnemyAI : MonoBehaviour
                 if (!reachedPlayer)
                 {
                     walkSound.enabled = false;
-                    runSound.enabled = true;
+                    if (canMove) runSound.enabled = true;
+                    else runSound.enabled = false;
                     animator.SetBool("isRunning", true);
                 }
                 break;
