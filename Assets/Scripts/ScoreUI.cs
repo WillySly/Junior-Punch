@@ -11,13 +11,14 @@ public class ScoreUI : MonoBehaviour
 
     void Start()
     {
+        EnemyHealth.enemyDeathEvent += IncreaseScore;
         scoreText = GetComponent<TMP_Text>();
         scoreText.text = "Slayed: " + score.ToString();
     }
 
-    public void IncreaseScore(int delta)
+    public void IncreaseScore()
     {
-        score += delta;
+        score++;
         scoreText.text = "Slayed: " + score.ToString();
 
     }

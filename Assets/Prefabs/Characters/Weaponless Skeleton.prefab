@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: 2838039290174253356}
   - component: {fileID: 1115712154994965456}
   m_Layer: 0
-  m_Name: DeathSound
+  m_Name: EnemyDeathSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3941,6 +3941,7 @@ GameObject:
   - component: {fileID: 8558471226208664296}
   - component: {fileID: 8558471226208664300}
   - component: {fileID: 8558471226208664302}
+  - component: {fileID: 2357044312514174626}
   - component: {fileID: 6979265270231882893}
   m_Layer: 7
   m_Name: Weaponless Skeleton
@@ -4118,8 +4119,20 @@ MonoBehaviour:
   healthbarForegroundImage: {fileID: 8558471225460132395}
   dieAnimationDelay: 1
   disappearDelay: 3
+--- !u!114 &2357044312514174626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7911724690802240391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d6adae0cc33ad642a758b2ca5a13a9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   deathSound: {fileID: 1115712154994965456}
-  boneShattersound: {fileID: 5228076895414144823}
+  boneShutterSound: {fileID: 5228076895414144823}
 --- !u!82 &6979265270231882893
 AudioSource:
   m_ObjectHideFlags: 0

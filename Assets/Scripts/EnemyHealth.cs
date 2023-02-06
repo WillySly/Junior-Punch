@@ -2,31 +2,31 @@ using UnityEngine.AI;
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using System;
+
 
 public class EnemyHealth : Health
 {
     [SerializeField] float dieAnimationDelay = 1f;
     [SerializeField] float disappearDelay = 3f;
-    [SerializeField] AudioSource deathSound, boneShattersound;
-    
-    RectTransform scoreUi;
-    TMP_Text scoreText;
 
+    public static event Action enemyDeathEvent;
+   
     protected override void Die()
     {
         base.Die();
         GetComponent<EnemyAI>().enabled = false;
         GetComponent<NavMeshAgent>().enabled = false;
-        StartCoroutine(playDyingAnimation());
+        StartCoroutine(PlayDyingAnimation());
 
-        scoreUi = (RectTransform) GameObject.FindGameObjectWithTag("ScoreUI").transform;
-        scoreUi.GetComponent<ScoreUI>().IncreaseScore(1);
+        if (enemyDeathEvent != null)
+        {
+            enemyDeathEvent();
+        }
     }
 
-    IEnumerator playDyingAnimation()
+    IEnumerator PlayDyingAnimation()
     {
-        deathSound.enabled = true;
-
         yield return new WaitForSeconds(dieAnimationDelay);
 
         if (healthbar != null)
@@ -34,10 +34,10 @@ public class EnemyHealth : Health
             healthbar.gameObject.SetActive(false);
         }
 
-        boneShattersound.enabled = true;
 
         yield return new WaitForSeconds(disappearDelay);
         Destroy(gameObject);
     }
+
 
 }
