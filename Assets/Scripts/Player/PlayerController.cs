@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,11 +10,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float walkingSpeed = 10;
     [SerializeField] int runningFactor = 3;     // running speed multiplier
     [SerializeField] float punchRange = 0.1f;
-    [SerializeField] float dist = 10f;
     [SerializeField] TMP_Text charName;
-    [SerializeField] AudioSource walkSound, runSound;
 
-    Animator animator;
+    PlayerFXController FXController;
+     
     string playerName = "Duffy the Skeleton Slaya";
 
     float cameraMouseDistanceFactor = 3f; // safeguard for mouse/camera overlap
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        animator = GetComponent<Animator>();
+        FXController = GetComponent<PlayerFXController>();
         charName.text = playerName;
     }
 
@@ -41,29 +41,25 @@ public class PlayerController : MonoBehaviour
 
         if (moveHorizontally != 0 || moveVertically != 0)
         {
-            animator.SetBool("isMoving", true);
+            FXController.walk();
             transform.position += new Vector3(moveHorizontally, 0, moveVertically);
-            walkSound.enabled = true;
         }
         else
         {
-            animator.SetBool("isMoving", false);
-            walkSound.enabled = false;
+            FXController.stopMoving();
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             walkingSpeed *= runningFactor;
-            animator.SetBool("isRunning", true);
-            walkSound.enabled = false;
-            runSound.enabled = true;
+            FXController.run();
 
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             walkingSpeed /= runningFactor;
-            animator.SetBool("isRunning", false);
-            runSound.enabled = false;
+            FXController.stopRunning();
+  
         }
 
     }

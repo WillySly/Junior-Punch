@@ -7,9 +7,8 @@ using System;
 
 public class PlayerHealth : Health
 {
-    [SerializeField] float dieAnimationDelay = 5f;
+    [SerializeField] float gameOverScreenDelay = 5f;
     [SerializeField] GameObject gameOverCanvas;
-    [SerializeField] AudioSource deathSound;
 
     public static event Action playerDeathEvent;
     public static event Action<int, float> playerHitEvent;
@@ -17,7 +16,6 @@ public class PlayerHealth : Health
     protected override void Start()
     {
         base.Start();
-
     }
 
     protected override void Die()
@@ -30,7 +28,6 @@ public class PlayerHealth : Health
 
 
         base.Die();
-        deathSound.enabled = true;
 
         if (playerDeathEvent != null)
         {
@@ -52,13 +49,8 @@ public class PlayerHealth : Health
 
     IEnumerator PlayDyingAnimation()
     {
-        yield return new WaitForSeconds(dieAnimationDelay);
+        yield return new WaitForSeconds(gameOverScreenDelay);
         gameOverCanvas.SetActive(true);
-
     }
-
-   
-
- 
 
 }

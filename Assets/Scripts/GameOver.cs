@@ -11,8 +11,10 @@ public class GameOver : MonoBehaviour
 
     void Start()
     {
+        enabled = true;
         TMP_Text gameOverText = GetComponent<TMP_Text>();
         gameOverText.text = finalText;
+
     }
 
     void Update()
