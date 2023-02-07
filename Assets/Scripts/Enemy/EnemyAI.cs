@@ -18,8 +18,6 @@ public class EnemyAI : MonoBehaviour
     [Range(0, 360)]
     [SerializeField] public float viewAngle;
 
- 
-
     List<Transform> waypoints;
     Transform target;
     enum state { walk, idle, chase}
@@ -31,20 +29,21 @@ public class EnemyAI : MonoBehaviour
     int destinationWaypointIndex;
     float rotationSpeed = 10f;
 
-    bool reachedPlayer;
-    bool canMove = true;        // to start moving only if animation damage or attack is finished
-    bool canAttack = true;      // to make sure the attack doesn't start before damage animation is finished
+    bool reachedPlayer = false;
 
+    bool busy = false;  // if enemy is busy with animation, don't move or attack
+          
     Vector3 targetLastPosition; // to check whether player moved
 
     EnemyFXController FXController;
 
     void Start()
-    {
-        Debug.Log(Time.time + " enemyAi start");
+    {   
         FXController = GetComponent<EnemyFXController>();
-        Debug.Log(Time.time + " FXController is " + FXController.isActiveAndEnabled);
-        if (FXController == null) Debug.Log(Time.time + " FXController is null");
+        if (FXController != null)
+            SetState(state.idle);
+
+        EnemyFXController.EnemyAnimationFinishedEvent += EnemyPermissions;
 
         target = GameObject.FindGameObjectWithTag("Player").transform;
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -53,8 +52,6 @@ public class EnemyAI : MonoBehaviour
         navMeshAgent.autoBraking = true;
         navMeshAgent.stoppingDistance = destinationErrorMargin;
         reachedPlayer = false;
-        if (FXController != null)
-            SetState(state.idle);
     }
 
     void Update()
@@ -101,17 +98,14 @@ public class EnemyAI : MonoBehaviour
         switch (state)
         {
             case state.walk:
-
                 FXController.Walk();
                 break;
             case state.idle:
                 FXController.Idle();
                 break;
             case state.chase:
-
-                FXController.Chase(canMove, reachedPlayer);
+                FXController.Chase(reachedPlayer);
                 break;
-
             default:
                 FXController.Idle();
                 break;
@@ -134,10 +128,9 @@ public class EnemyAI : MonoBehaviour
 
         if (!reachedPlayer)
         {
-            // if in attack animation, wait for animation to stop and chase again
-            // if attack didn't happen yet, canMove is set to true by default
+            // if in attack or damage animation, wait for animation to stop and chase again
 
-            if (canMove)
+            if (!busy)
             {
                 SetState(state.chase);
                 navMeshAgent.SetDestination(target.position);
@@ -160,7 +153,7 @@ public class EnemyAI : MonoBehaviour
         // if player within attack range, attack
         if (IsInMeleeRangeOf(target))
         {
-            if (canAttack)
+            if (!busy)
             {
                 Stop();
                 reachedPlayer = true;
@@ -233,34 +226,17 @@ public class EnemyAI : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 
+    void EnemyPermissions(bool busy)
+    {
+        this.busy = busy;
+    }
+
     public void SetWaypoints(List<Transform> wp)
     {
         waypoints = wp;
     }
 
-    // catches attack animation ending event. Enemy must not move during attack
-    public void AttackEnded()
-    {
-        canMove = true;
-    }
-
-    public void AttackStarted()
-    {
-        canMove = false;
-    }
-
-    public void DamageEnded()
-    {
-        canMove = true;
-        canAttack = true;
-    }
-
-    public void DamageStarted()
-    {
-        canMove = false;
-        canAttack = false;
-    }
-
+   
     public Vector3 DirFromAngle(float angle, bool angleIsGlobal)
     {
         if (!angleIsGlobal)
@@ -270,6 +246,10 @@ public class EnemyAI : MonoBehaviour
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
 
+    private void OnDestroy()
+    {
+        EnemyFXController.EnemyAnimationFinishedEvent -= EnemyPermissions;
 
+    }
 
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EnemyFXController : MonoBehaviour
 {
@@ -13,7 +14,12 @@ public class EnemyFXController : MonoBehaviour
     [SerializeField] ParticleSystem hitEffect;
     [SerializeField] Animator animator;
 
+    public static event Action<bool> EnemyAnimationFinishedEvent;
+
+
     bool isHit = false; // to check which sound to playe, hit or reach
+    bool busy = true;
+
 
     void Start()
     {
@@ -44,14 +50,14 @@ public class EnemyFXController : MonoBehaviour
 
     }
 
-    public void Chase(bool canMove, bool reachedPlayer)
+    public void Chase(bool reachedPlayer)
     {
         animator.SetBool("isWalking", false);
         animator.SetBool("isIdle", false);
         if (!reachedPlayer)
         {
             walkSound.enabled = false;
-            if (canMove) runSound.enabled = true;
+            if (!busy) runSound.enabled = true;
             else runSound.enabled = false;
             animator.SetBool("isRunning", true);
         }
@@ -89,7 +95,7 @@ public class EnemyFXController : MonoBehaviour
         if (isHit)
         {
             hitEffect.Play();
-            int index = Random.Range(0, 2);
+            int index = UnityEngine.Random.Range(0, 2);
 
             if (!hitSounds[index].enabled)
             {
@@ -124,4 +130,30 @@ public class EnemyFXController : MonoBehaviour
     }
 
 
+    // catches attack animation ending event. Enemy must not move during attack
+    public void AttackEnded()
+    {
+        busy = false;
+        EnemyAnimationFinishedEvent(busy);
+    }
+
+    public void AttackStarted()
+    {
+        busy = true;
+        EnemyAnimationFinishedEvent(busy);
+
+    }
+
+    public void DamageEnded()
+    {
+        busy = false;
+        EnemyAnimationFinishedEvent(busy);
+
+    }
+
+    public void DamageStarted()
+    {
+        busy = true;
+        EnemyAnimationFinishedEvent(busy);
+    }
 }

@@ -4222,7 +4222,7 @@ MonoBehaviour:
   stopChasingDistance: 25
   destinationErrorMargin: 4
   viewRadius: 20
-  viewAngle: 117
+  viewAngle: 120
 --- !u!114 &8558471226208664300
 MonoBehaviour:
   m_ObjectHideFlags: 0
