@@ -13,7 +13,6 @@ public class PlayerHealthUI : MonoBehaviour
     void Start()
     {
 
-        Debug.Log(" PlayerHealthUI created");
         health = player.GetComponent<PlayerHealth>().GetHealth();
         healthText = GetComponent<TMP_Text>();
         healthText.text = "HP: " + health.ToString();

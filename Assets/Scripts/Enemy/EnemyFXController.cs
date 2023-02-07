@@ -14,11 +14,9 @@ public class EnemyFXController : MonoBehaviour
     [SerializeField] ParticleSystem hitEffect;
     [SerializeField] Animator animator;
 
-    public static event Action<bool> EnemyAnimationFinishedEvent;
-
 
     bool isHit = false; // to check which sound to playe, hit or reach
-    bool busy = true;
+    bool busy = false;
 
 
     void Start()
@@ -122,6 +120,12 @@ public class EnemyFXController : MonoBehaviour
         }
     }
 
+
+    public bool isBusy()
+    {
+        return busy;
+    }
+
     private void OnDestroy()
     {
         EnemyHealth.enemyDeathEvent -= PlayEnemyDyingSounds;
@@ -131,29 +135,27 @@ public class EnemyFXController : MonoBehaviour
 
 
     // catches attack animation ending event. Enemy must not move during attack
-    public void AttackEnded()
+    private void AttackEnded()
     {
         busy = false;
-        EnemyAnimationFinishedEvent(busy);
     }
 
-    public void AttackStarted()
+    private void AttackStarted()
     {
         busy = true;
-        EnemyAnimationFinishedEvent(busy);
 
     }
 
-    public void DamageEnded()
+    private void DamageEnded()
     {
         busy = false;
-        EnemyAnimationFinishedEvent(busy);
 
     }
 
-    public void DamageStarted()
+    private void DamageStarted()
     {
         busy = true;
-        EnemyAnimationFinishedEvent(busy);
     }
+
+
 }

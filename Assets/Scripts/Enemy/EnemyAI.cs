@@ -19,35 +19,32 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] public float viewAngle;
 
     List<Transform> waypoints;
-    Transform target;
-    enum state { walk, idle, chase}
-    state currentState;
-
+    Transform player;
     NavMeshAgent navMeshAgent;
     EnemyCombat enemyCombat;
+
+    enum state { walk, idle, chase }
+    state currentState;
+
 
     int destinationWaypointIndex;
     float rotationSpeed = 10f;
 
-    bool reachedPlayer = false;
+    bool reachedPlayer;
 
-    bool busy = false;  // if enemy is busy with animation, don't move or attack
-          
     Vector3 targetLastPosition; // to check whether player moved
 
     EnemyFXController FXController;
 
     void Start()
-    {   
+    {
         FXController = GetComponent<EnemyFXController>();
         if (FXController != null)
             SetState(state.idle);
-
-        EnemyFXController.EnemyAnimationFinishedEvent += EnemyPermissions;
-
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         navMeshAgent = GetComponent<NavMeshAgent>();
         enemyCombat = GetComponent<EnemyCombat>();
+
         destinationWaypointIndex = 0;
         navMeshAgent.autoBraking = true;
         navMeshAgent.stoppingDistance = destinationErrorMargin;
@@ -115,51 +112,54 @@ public class EnemyAI : MonoBehaviour
 
     public void Chase()
     {
-        if (IsInMeleeRangeOf(target))
-        {
-            RotateTowards(target);
-        }
 
-        // if the player moved during attack
-        if (target.position != targetLastPosition)
-        {
-            reachedPlayer = false;
-        }
-
-        if (!reachedPlayer)
-        {
-            // if in attack or damage animation, wait for animation to stop and chase again
-
-            if (!busy)
+            if (IsInMeleeRangeOf(player))
             {
-                SetState(state.chase);
-                navMeshAgent.SetDestination(target.position);
-                targetLastPosition = target.position;
-                Move(runSpeed);
+                RotateTowards(player);
             }
-        }
 
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
-        // if player is to far away, stop chasing and go back to patroling
-        if (distanceToTarget >= stopChasingDistance)
-        {
-            SetState(state.idle);
-            Stop();
-            ReturnToPost();
-            return;
-        }
-
-        // if player within attack range, attack
-        if (IsInMeleeRangeOf(target))
-        {
-            if (!busy)
+            // if the player moved during attack
+            if (player.position != targetLastPosition)
             {
+                reachedPlayer = false;
+            }
+
+            if (!reachedPlayer)
+            {
+                // if in attack or damage animation, wait for animation to stop and chase again
+
+                if (!FXController.isBusy())
+                {
+                    SetState(state.chase);
+                    navMeshAgent.SetDestination(player.position);
+                    targetLastPosition = player.position;
+                    Move(runSpeed);
+                }
+            }
+
+            float distanceToTarget = Vector3.Distance(transform.position, player.position);
+
+            // if player is to far away, stop chasing and go back to patroling
+            if (distanceToTarget >= stopChasingDistance)
+            {
+                SetState(state.idle);
                 Stop();
-                reachedPlayer = true;
-                enemyCombat.EngageInCombat();
+                ReturnToPost();
+                return;
             }
-        }
+
+            // if player within attack range, attack
+            if (IsInMeleeRangeOf(player))
+            {
+                if (!FXController.isBusy())
+                {
+                    Stop();
+                    reachedPlayer = true;
+                    enemyCombat.EngageInCombat();
+                }
+            }
+
+        
     }
 
     void Patroling()
@@ -186,13 +186,13 @@ public class EnemyAI : MonoBehaviour
     {
         navMeshAgent.isStopped = false;
         navMeshAgent.speed = speed;
-    }   
+    }
 
     void Stop()
     {
         navMeshAgent.speed = 0;
         navMeshAgent.isStopped = true;
-        navMeshAgent.velocity = Vector3.zero;       
+        navMeshAgent.velocity = Vector3.zero;
     }
 
     void SetNextWaypoint()
@@ -204,7 +204,7 @@ public class EnemyAI : MonoBehaviour
             navMeshAgent.SetDestination(waypoints[destinationWaypointIndex].position);
         }
 
-    }  
+    }
 
     void ReturnToPost()
     {
@@ -226,17 +226,12 @@ public class EnemyAI : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 
-    void EnemyPermissions(bool busy)
-    {
-        this.busy = busy;
-    }
-
     public void SetWaypoints(List<Transform> wp)
     {
         waypoints = wp;
     }
 
-   
+
     public Vector3 DirFromAngle(float angle, bool angleIsGlobal)
     {
         if (!angleIsGlobal)
@@ -244,12 +239,6 @@ public class EnemyAI : MonoBehaviour
             angle += transform.eulerAngles.y;
         }
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
-    }
-
-    private void OnDestroy()
-    {
-        EnemyFXController.EnemyAnimationFinishedEvent -= EnemyPermissions;
-
     }
 
 }
