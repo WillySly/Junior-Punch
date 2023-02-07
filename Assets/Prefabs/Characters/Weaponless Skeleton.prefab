@@ -1109,7 +1109,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0baba9432c67cd945b7b447965b68a2e, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.225
+  m_Volume: 0.161
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1118,7 +1118,7 @@ AudioSource:
   Priority: 181
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 30
+  MaxDistance: 20
   Pan2D: 0
   rolloffMode: 1
   BypassEffects: 0
@@ -4223,6 +4223,7 @@ MonoBehaviour:
   destinationErrorMargin: 4
   viewRadius: 20
   viewAngle: 120
+  sneakingDistance: 5
 --- !u!114 &8558471226208664300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4260,7 +4261,6 @@ MonoBehaviour:
   healthbarAnimationDelay: 0.1
   healthbarUpdateSpeedSeconds: 0.5
   healthbarForegroundImage: {fileID: 8558471225460132395}
-  dieAnimationDelay: 1
   disappearDelay: 3
 --- !u!1 &7911724690802240393
 GameObject:

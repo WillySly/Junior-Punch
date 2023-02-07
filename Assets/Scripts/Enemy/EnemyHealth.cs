@@ -1,14 +1,12 @@
 using UnityEngine.AI;
 using System.Collections;
 using UnityEngine;
-using TMPro;
 using System;
 
 
 public class EnemyHealth : Health
 {
-    [SerializeField] float dieAnimationDelay = 1f;
-    [SerializeField] float disappearDelay = 3f;
+    [SerializeField] float disappearDelay = 5f;
 
     public static event Action enemyDeathEvent;
    
@@ -17,7 +15,9 @@ public class EnemyHealth : Health
         base.Die();
         GetComponent<EnemyAI>().enabled = false;
         GetComponent<NavMeshAgent>().enabled = false;
-        StartCoroutine(PlayDyingAnimation());
+        GetComponent<CapsuleCollider>().enabled = false;
+
+        StartCoroutine(Disappear());
 
         if (enemyDeathEvent != null)
         {
@@ -25,16 +25,17 @@ public class EnemyHealth : Health
         }
     }
 
-    IEnumerator PlayDyingAnimation()
-    {
-        yield return new WaitForSeconds(dieAnimationDelay);
 
+    private void EnemyFallEvent()
+    {
         if (healthbar != null)
         {
             healthbar.gameObject.SetActive(false);
         }
+    }
 
-
+    IEnumerator Disappear()
+    {
         yield return new WaitForSeconds(disappearDelay);
         Destroy(gameObject);
     }

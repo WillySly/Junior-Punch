@@ -17,6 +17,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] public float viewRadius;
     [Range(0, 360)]
     [SerializeField] public float viewAngle;
+    [SerializeField] float sneakingDistance = 5f;
 
     List<Transform> waypoints;
     Transform player;
@@ -72,11 +73,10 @@ public class EnemyAI : MonoBehaviour
         {
             Transform target = targetsInView[i].transform;
             Vector3 directionToTarget = (target.position - transform.position).normalized;
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-            if (Vector3.Angle(transform.forward, directionToTarget) < viewAngle / 2)
+            if (Vector3.Angle(transform.forward, directionToTarget) < viewAngle / 2 || distanceToTarget < sneakingDistance)
             {
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
                 {
                     player = target;
@@ -116,6 +116,7 @@ public class EnemyAI : MonoBehaviour
         {
             if (IsInMeleeRangeOf(player))
             {
+                FXController.EngageInCombat();
                 RotateTowards(player);
             }
 
@@ -156,7 +157,6 @@ public class EnemyAI : MonoBehaviour
                 {
                     Stop();
                     reachedPlayer = true;
-                    FXController.EngageInCombat();
                     enemyCombat.EngageInCombat();
                 }
             }

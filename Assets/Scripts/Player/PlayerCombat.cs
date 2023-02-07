@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -8,6 +9,10 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] int attackDamage = 20;
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask enemyLayer;
+
+    public static event Action playerHitEvent;
+    public static event Action playerKickEvent;
+    public static event Action playerAttackEvent;
 
     PlayerFXController FXController;
 
@@ -20,21 +25,31 @@ public class PlayerCombat : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space))
         {
-            FXController.kick();
             Attack();
         }
     }
 
     void Attack()
     {
-        FXController.attack();
-     
+        if (playerAttackEvent != null)
+        {
+            playerAttackEvent();
+        }
+
         Collider[] enemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
 
-        foreach(Collider enemy in enemies)
+        foreach (Collider enemy in enemies)
         {
             enemy.GetComponent<Health>().gotHit(attackDamage);
-            FXController.hit();
+            if (playerHitEvent != null)
+            {
+                playerHitEvent();
+            }
+        }
+
+        if (playerKickEvent != null)
+        {
+            playerKickEvent();
         }
     }
 

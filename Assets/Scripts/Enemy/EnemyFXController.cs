@@ -15,9 +15,9 @@ public class EnemyFXController : MonoBehaviour
     [SerializeField] Animator animator;
 
 
-    bool isHit = false; // to check which sound to playe, hit or reach
+    bool isHit = false; // to check which sound to play, hit or reach
     bool busy = false;
-    bool engagedInCombat = false;
+    bool engagedInCombat = false; //to play hit and attack only if engaged in combat
 
 
     void Start()
@@ -46,7 +46,6 @@ public class EnemyFXController : MonoBehaviour
         animator.SetBool("isWalking", false);
         animator.SetBool("isIdle", true);
         animator.SetBool("isRunning", false);
-
     }
 
     public void Chase(bool reachedPlayer)
@@ -65,7 +64,6 @@ public class EnemyFXController : MonoBehaviour
 
     public void Attack()
     {
-
         if (engagedInCombat)
         {
             animator.SetTrigger("attack");
@@ -84,10 +82,11 @@ public class EnemyFXController : MonoBehaviour
 
     void PlayEnemyDyingSounds()
     {
-        deathSound.enabled = true;
+        if (engagedInCombat)
+            deathSound.enabled = true;
     }
 
-    public void EnemyFallEvent()
+    private void EnemyFallEvent()
     {
         boneShutterSound.enabled = true;
     }
@@ -109,7 +108,6 @@ public class EnemyFXController : MonoBehaviour
                 hitSounds[index].Play();
             }
             isHit = false;
-
         }
         else
         {
@@ -158,7 +156,6 @@ public class EnemyFXController : MonoBehaviour
     private void DamageEnded()
     {
         busy = false;
-
     }
 
     private void DamageStarted()

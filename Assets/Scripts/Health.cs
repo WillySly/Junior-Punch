@@ -13,7 +13,7 @@ public class Health : MonoBehaviour
     [SerializeField] protected float healthbarAnimationDelay = 0.1f;
     [SerializeField] protected float healthbarUpdateSpeedSeconds = 0.5f;
     [SerializeField] protected Image healthbarForegroundImage;
-   
+
     protected Transform healthbar;
     protected Animator animator;
     protected int initHealth;
@@ -65,7 +65,9 @@ public class Health : MonoBehaviour
     {
         return health;
     }
-        IEnumerator playHitAnimation()
+
+
+    IEnumerator playHitAnimation()
     {
         yield return new WaitForSeconds(hitAnimationDelay);
         animator.SetTrigger("isHurt");

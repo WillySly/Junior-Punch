@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float walkingSpeed = 10;
     [SerializeField] int runningFactor = 3;     // running speed multiplier
-    [SerializeField] float punchRange = 0.1f;
     [SerializeField] TMP_Text charName;
 
     PlayerFXController FXController;
@@ -41,24 +40,24 @@ public class PlayerController : MonoBehaviour
 
         if (moveHorizontally != 0 || moveVertically != 0)
         {
-            FXController.walk();
+            FXController.Walk();
             transform.position += new Vector3(moveHorizontally, 0, moveVertically);
         }
         else
         {
-            FXController.stopMoving();
+            FXController.StopMoving();
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             walkingSpeed *= runningFactor;
-            FXController.run();
+            FXController.Run();
 
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             walkingSpeed /= runningFactor;
-            FXController.stopRunning();
+            FXController.StopRunning();
   
         }
 

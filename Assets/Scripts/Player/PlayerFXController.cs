@@ -13,65 +13,80 @@ public class PlayerFXController : MonoBehaviour
     [SerializeField] ParticleSystem hitEffect;
     [SerializeField] Animator animator;
 
+    bool isHit = false;
+
     void Start()
     {
         PlayerHealth.playerDeathEvent += PlayDyingSounds;
+        PlayerCombat.playerAttackEvent += Attack;
+        PlayerCombat.playerHitEvent += Hit;
+        PlayerCombat.playerKickEvent += Kick;
+
     }
 
-    public void walk()
+    public void Walk()
     {
         animator.SetBool("isMoving", true);
         walkSound.enabled = true;
     }
 
-    public void run()
+    public void Run()
     {
         animator.SetBool("isRunning", true);
         walkSound.enabled = false;
         runSound.enabled = true;
     }
 
-    public void stopMoving()
+    public void StopMoving()
     {
         animator.SetBool("isMoving", false);
         walkSound.enabled = false;
     }
 
-    public void stopRunning()
+    public void StopRunning()
     {
         animator.SetBool("isRunning", false);
         runSound.enabled = false;
     }
 
-    public void kick()
+    public void Hit()
     {
-        kickSound.enabled = true;
-        if (!kickSound.enabled)
+        isHit = true;
+    }
+
+    public void Kick()
+    {
+        Debug.Log("Kick");
+        if (isHit)
+        {
+            hitEffect.Play();
+
+            int index = Random.Range(0, 2);
+
+            if (!hitSounds[index].enabled)
+            {
+                hitSounds[index].enabled = true;
+            }
+            else
+            {
+                hitSounds[index].Play();
+            }
+        }
+        else
         {
             kickSound.enabled = true;
-        }
-        else
-        {
-            kickSound.Play();
-        }
-    }
-
-    public void hit()
-    {
-        hitEffect.Play();
-
-        int index = Random.Range(0, 2);
-
-        if (!hitSounds[index].enabled)
-        {
-            hitSounds[index].enabled = true;
-        }
-        else
-        {
-            hitSounds[index].Play();
+            if (!kickSound.enabled)
+            {
+                kickSound.enabled = true;
+            }
+            else
+            {
+                kickSound.Play();
+            }
         }
     }
-    public void attack()
+
+    public void Attack()
     {
         animator.SetTrigger("attack");
     }
@@ -84,7 +99,8 @@ public class PlayerFXController : MonoBehaviour
     private void OnDestroy()
     {
         PlayerHealth.playerDeathEvent -= PlayDyingSounds;
+        PlayerCombat.playerAttackEvent -= Attack;
+        PlayerCombat.playerHitEvent -= Hit;
+        PlayerCombat.playerHitEvent -= Kick;
     }
-
-
 }

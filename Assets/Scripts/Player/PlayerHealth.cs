@@ -28,6 +28,9 @@ public class PlayerHealth : Health
         PlayerCombat pcombat = GetComponent<PlayerCombat>();
         pcombat.enabled = false;
 
+        GetComponent<CapsuleCollider>().enabled = false;
+
+
         base.Die();
 
         if (playerDeathEvent != null)
