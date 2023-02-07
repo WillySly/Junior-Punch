@@ -6980,6 +6980,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8818897617290601782}
   - {fileID: 4882946604950427774}
   m_Father: {fileID: 5184988766765120086}
   m_RootOrder: 0
@@ -7153,7 +7154,6 @@ Transform:
   - {fileID: 1262599294913715404}
   - {fileID: 1034360887}
   - {fileID: 1245936443}
-  - {fileID: 8818897617290601782}
   - {fileID: 5881773074455945316}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -7223,7 +7223,6 @@ MonoBehaviour:
   walkingSpeed: 6
   runningFactor: 2
   punchRange: 2
-  dist: 10
   charName: {fileID: 8493704948224446101}
 --- !u!114 &2506745891054144280
 MonoBehaviour:
@@ -7260,7 +7259,6 @@ MonoBehaviour:
   healthbarAnimationDelay: 0.1
   healthbarUpdateSpeedSeconds: 0.5
   healthbarForegroundImage: {fileID: 1840174443892172550}
-  dieAnimationDelay: 5
   gameOverCanvas: {fileID: 0}
 --- !u!114 &1315304001451951918
 MonoBehaviour:
@@ -7283,6 +7281,7 @@ MonoBehaviour:
   - {fileID: 443372206}
   - {fileID: 1317381993}
   hitEffect: {fileID: 1656412979657897604}
+  animator: {fileID: 4037574334286712377}
 --- !u!1 &5692372513839650270
 GameObject:
   m_ObjectHideFlags: 0
@@ -8076,8 +8075,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7100294574973432512}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.008, y: 0.39, z: 0.273}
+  m_LocalRotation: {x: -0.0000034765649, y: 0.044221256, z: -0.99902177, w: 0.000020480697}
+  m_LocalPosition: {x: -0.026508246, y: -0.1930837, z: 0.25236824}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8085,8 +8084,8 @@ Transform:
   - {fileID: 1103371218}
   - {fileID: 443372205}
   - {fileID: 1317381992}
-  m_Father: {fileID: 7958360621510784157}
-  m_RootOrder: 6
+  m_Father: {fileID: 1349497465803675264}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7346646908897829490
 GameObject:
@@ -8499,7 +8498,7 @@ Transform:
   m_Children:
   - {fileID: 8403347381420412910}
   m_Father: {fileID: 1349497465803675264}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8842823221754162702
 GameObject:
@@ -8581,7 +8580,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 701770569972339697, guid: d7ef5caa92bf75942ba54d3e3fbfad38, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 701770569972339697, guid: d7ef5caa92bf75942ba54d3e3fbfad38, type: 3}
       propertyPath: m_AnchorMax.x

@@ -18,7 +18,7 @@ public class EnemyAI : MonoBehaviour
     [Range(0, 360)]
     [SerializeField] public float viewAngle;
 
-    [SerializeField] AudioSource walkSound, runSound;
+ 
 
     List<Transform> waypoints;
     Transform target;
@@ -26,7 +26,6 @@ public class EnemyAI : MonoBehaviour
     state currentState;
 
     NavMeshAgent navMeshAgent;
-    Animator animator;
     EnemyCombat enemyCombat;
 
     int destinationWaypointIndex;
@@ -38,18 +37,24 @@ public class EnemyAI : MonoBehaviour
 
     Vector3 targetLastPosition; // to check whether player moved
 
+    EnemyFXController FXController;
+
     void Start()
     {
+        Debug.Log(Time.time + " enemyAi start");
+        FXController = GetComponent<EnemyFXController>();
+        Debug.Log(Time.time + " FXController is " + FXController.isActiveAndEnabled);
+        if (FXController == null) Debug.Log(Time.time + " FXController is null");
+
         target = GameObject.FindGameObjectWithTag("Player").transform;
         navMeshAgent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
         enemyCombat = GetComponent<EnemyCombat>();
-
         destinationWaypointIndex = 0;
         navMeshAgent.autoBraking = true;
         navMeshAgent.stoppingDistance = destinationErrorMargin;
         reachedPlayer = false;
-        SetState(state.idle);
+        if (FXController != null)
+            SetState(state.idle);
     }
 
     void Update()
@@ -96,37 +101,19 @@ public class EnemyAI : MonoBehaviour
         switch (state)
         {
             case state.walk:
-                walkSound.enabled = true;
-                runSound.enabled = false;
 
-                animator.SetBool("isWalking", true);
-                animator.SetBool("isIdle", false);
-                animator.SetBool("isRunning", false);
-
+                FXController.Walk();
                 break;
             case state.idle:
-                walkSound.enabled = false;
-                runSound.enabled = false;
-                animator.SetBool("isWalking", false);
-                animator.SetBool("isIdle", true);
-                animator.SetBool("isRunning", false);
-
+                FXController.Idle();
                 break;
             case state.chase:
-                animator.SetBool("isWalking", false);
-                animator.SetBool("isIdle", false);
-                if (!reachedPlayer)
-                {
-                    walkSound.enabled = false;
-                    if (canMove) runSound.enabled = true;
-                    else runSound.enabled = false;
-                    animator.SetBool("isRunning", true);
-                }
+
+                FXController.Chase(canMove, reachedPlayer);
                 break;
 
             default:
-                animator.SetBool("isWalking", false);
-                animator.SetBool("isIdle", true);
+                FXController.Idle();
                 break;
         }
     }

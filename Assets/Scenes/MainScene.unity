@@ -1676,6 +1676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b862182685fafe6478a74a6c33103c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 543450652634595667}
 --- !u!1 &148042320
 GameObject:
   m_ObjectHideFlags: 0
@@ -3450,7 +3451,7 @@ MonoBehaviour:
     FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 5
-    FarClipPlane: 50
+    FarClipPlane: 100
     Dutch: -0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
@@ -6147,7 +6148,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 5
-  far clip plane: 50
+  far clip plane: 100
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -12361,7 +12362,7 @@ MonoBehaviour:
     FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 5
-    FarClipPlane: 50
+    FarClipPlane: 100
     Dutch: 0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}

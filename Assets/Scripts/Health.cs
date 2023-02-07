@@ -61,7 +61,11 @@ public class Health : MonoBehaviour
         }
     }
 
-    IEnumerator playHitAnimation()
+    public int GetHealth()
+    {
+        return health;
+    }
+        IEnumerator playHitAnimation()
     {
         yield return new WaitForSeconds(hitAnimationDelay);
         animator.SetTrigger("isHurt");

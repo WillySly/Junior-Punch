@@ -7,7 +7,6 @@ using System;
 
 public class PlayerHealth : Health
 {
-    [SerializeField] float gameOverScreenDelay = 5f;
     [SerializeField] GameObject gameOverCanvas;
 
     public static event Action playerDeathEvent;
@@ -26,7 +25,6 @@ public class PlayerHealth : Health
         PlayerCombat pcombat = GetComponent<PlayerCombat>();
         pcombat.enabled = false;
 
-
         base.Die();
 
         if (playerDeathEvent != null)
@@ -34,7 +32,6 @@ public class PlayerHealth : Health
             playerDeathEvent();
         }
 
-        StartCoroutine(PlayDyingAnimation());
     }
 
     public override void gotHit(int points)
@@ -47,9 +44,8 @@ public class PlayerHealth : Health
         }
     }
 
-    IEnumerator PlayDyingAnimation()
+    private void DyingAnimationFinished()
     {
-        yield return new WaitForSeconds(gameOverScreenDelay);
         gameOverCanvas.SetActive(true);
     }
 

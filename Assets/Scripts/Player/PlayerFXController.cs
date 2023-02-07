@@ -12,14 +12,10 @@ public class PlayerFXController : MonoBehaviour
 
     [SerializeField] ParticleSystem hitEffect;
 
-
-    Animator animator;
-
+    [SerializeField] Animator animator;
 
     void Start()
     {
-        animator = GetComponent<Animator>();
-
         PlayerHealth.playerDeathEvent += PlayDyingSounds;
     }
 
@@ -85,4 +81,11 @@ public class PlayerFXController : MonoBehaviour
     {
         deathSound.enabled = true;
     }
+
+    private void OnDestroy()
+    {
+        PlayerHealth.playerDeathEvent -= PlayDyingSounds;
+    }
+
+
 }

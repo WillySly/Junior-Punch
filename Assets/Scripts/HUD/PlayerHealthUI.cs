@@ -6,19 +6,25 @@ using TMPro;
 
 public class PlayerHealthUI : MonoBehaviour
 {
+    [SerializeField] Transform player;
     int health = 200;
     TMP_Text healthText;
 
     void Start()
     {
-        PlayerHealth.playerHitEvent += DecreaseHealth;
+
+        Debug.Log(" PlayerHealthUI created");
+        health = player.GetComponent<PlayerHealth>().GetHealth();
         healthText = GetComponent<TMP_Text>();
         healthText.text = "HP: " + health.ToString();
+        PlayerHealth.playerHitEvent += DecreaseHealth;
+
     }
 
     public void DecreaseHealth(int delta, float delay)
     {
         health -= delta;
+        if (health < 0) health = 0;
         StartCoroutine(DisplayHealth(delay));
     }
 
@@ -26,5 +32,10 @@ public class PlayerHealthUI : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         healthText.text = "HP: " + health.ToString();
+    }
+
+    public void OnDestroy()
+    {
+        PlayerHealth.playerHitEvent -= DecreaseHealth;
     }
 }

@@ -11,9 +11,7 @@ public class EnemyCombat : MonoBehaviour
 
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask playerLayer;
-    [SerializeField] ParticleSystem hitEffect;
-    [SerializeField] AudioSource reachSound;
-    [SerializeField] AudioSource[] hitSounds;
+
 
     enum state { attack, cooldown, notEnagged }
     bool engagedInCombat;
@@ -21,11 +19,10 @@ public class EnemyCombat : MonoBehaviour
     float cooldown; // attack cooldown
     state currentState;
 
-    Animator animator;
-
+    EnemyFXController FXController;
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        FXController = GetComponent<EnemyFXController>();
         engagedInCombat = false;
         cooldown = 0;
     }
@@ -46,23 +43,15 @@ public class EnemyCombat : MonoBehaviour
     {
         if (cooldown <= 0)
         {
-            reachSound.enabled = true;
-            if (!reachSound.enabled)
-            {
-                reachSound.enabled = true;
-            }
-            else
-            {
-                reachSound.Play();
-            }
 
+            FXController.Reach();
             SetState(state.attack);
             Collider[] target = Physics.OverlapSphere(attackPoint.position, attackRange, playerLayer);
 
             foreach (Collider player in target)
             {
                 player.GetComponent<PlayerHealth>().gotHit(attackDamage);
-                hitEffect.Play();
+                FXController.Hit();
             }
 
             SetState(state.cooldown);
@@ -80,14 +69,13 @@ public class EnemyCombat : MonoBehaviour
         switch (state)
         {
             case state.attack:
-                animator.SetTrigger("attack");
-                animator.SetBool("isRunning", false);
+                FXController.Attack();
                 break;
             case state.cooldown:
                 cooldown = attackCooldownTime;
                 break;
             case state.notEnagged:
-                animator.ResetTrigger("attack");
+                FXController.NotEngaged();
                 cooldown = 0;
                 break;
         }
@@ -96,16 +84,6 @@ public class EnemyCombat : MonoBehaviour
     {
         yield return new WaitForSeconds(attackAnimationDelay);
 
-        int index = Random.Range(0, 2);
-
-        if (!hitSounds[index].enabled)
-        {
-            hitSounds[index].enabled = true;
-        }
-        else
-        {
-            hitSounds[index].Play();
-        }
     }
 
     public float GetAttackRange()
