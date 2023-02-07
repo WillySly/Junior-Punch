@@ -56,7 +56,6 @@ public class PlayerFXController : MonoBehaviour
 
     public void Kick()
     {
-        Debug.Log("Kick");
         if (isHit)
         {
             hitEffect.Play();
@@ -71,6 +70,7 @@ public class PlayerFXController : MonoBehaviour
             {
                 hitSounds[index].Play();
             }
+            isHit = false;
         }
         else
         {
@@ -93,6 +93,8 @@ public class PlayerFXController : MonoBehaviour
 
     void PlayDyingSounds()
     {
+        animator.SetBool("isDead", true);
+
         deathSound.enabled = true;
     }
 
@@ -101,6 +103,7 @@ public class PlayerFXController : MonoBehaviour
         PlayerHealth.playerDeathEvent -= PlayDyingSounds;
         PlayerCombat.playerAttackEvent -= Attack;
         PlayerCombat.playerHitEvent -= Hit;
-        PlayerCombat.playerHitEvent -= Kick;
+        PlayerCombat.playerKickEvent -= Kick;
     }
+
 }

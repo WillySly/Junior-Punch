@@ -82,8 +82,16 @@ public class EnemyFXController : MonoBehaviour
 
     void PlayEnemyDyingSounds()
     {
+
         if (engagedInCombat)
+        {
+            animator.SetBool("isDead", true);
+
             deathSound.enabled = true;
+            runSound.enabled = false;
+
+        }
+
     }
 
     private void EnemyFallEvent()
@@ -162,6 +170,5 @@ public class EnemyFXController : MonoBehaviour
     {
         busy = true;
     }
-
 
 }

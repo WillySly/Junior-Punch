@@ -14,12 +14,6 @@ public class PlayerCombat : MonoBehaviour
     public static event Action playerKickEvent;
     public static event Action playerAttackEvent;
 
-    PlayerFXController FXController;
-
-    void Start()
-    {
-        FXController = GetComponent<PlayerFXController>();
-    }
 
     void Update()
     {

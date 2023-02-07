@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using Cinemachine;
+using System;
 
 
 // Parent class for all things health related
@@ -10,13 +10,14 @@ public class Health : MonoBehaviour
 {
     [SerializeField] protected int health;
     [SerializeField] protected float hitAnimationDelay = 0.3f;
-    [SerializeField] protected float healthbarAnimationDelay = 0.1f;
     [SerializeField] protected float healthbarUpdateSpeedSeconds = 0.5f;
     [SerializeField] protected Image healthbarForegroundImage;
 
+    protected float healthbarAnimationDelay = 0.1f;
     protected Transform healthbar;
     protected Animator animator;
     protected int initHealth;
+
 
     protected virtual void Start()
     {

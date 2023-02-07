@@ -30,7 +30,6 @@ public class PlayerHealth : Health
 
         GetComponent<CapsuleCollider>().enabled = false;
 
-
         base.Die();
 
         if (playerDeathEvent != null)

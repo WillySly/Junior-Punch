@@ -6174,8 +6174,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.5, y: -0, z: -0, w: 0.8660254}
-  m_LocalPosition: {x: -4.9284363, y: 561.72473, z: 378.8616}
+  m_LocalRotation: {x: 0.53784746, y: -0.0028267845, z: 0.0018034676, w: 0.8430356}
+  m_LocalPosition: {x: 0, y: 579.83594, z: 358.21814}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15587,7 +15587,7 @@ PrefabInstance:
       objectReference: {fileID: 2053369428}
     - target: {fileID: 6340684664320298651, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
       propertyPath: hitAnimationDelay
-      value: 0
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 6590559845177902270, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

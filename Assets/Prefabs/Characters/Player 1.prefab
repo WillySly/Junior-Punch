@@ -7125,10 +7125,10 @@ GameObject:
   - component: {fileID: 4037574334286712377}
   - component: {fileID: 2476309686990783081}
   - component: {fileID: 3801284516228556167}
+  - component: {fileID: 1315304001451951918}
   - component: {fileID: 5879890477837972460}
   - component: {fileID: 2506745891054144280}
   - component: {fileID: 6340684664320298651}
-  - component: {fileID: 1315304001451951918}
   m_Layer: 3
   m_Name: Player 1
   m_TagString: Player
@@ -7208,6 +7208,28 @@ CapsuleCollider:
   m_Height: 0.6700683
   m_Direction: 1
   m_Center: {x: 0, y: 0.31523976, z: 0}
+--- !u!114 &1315304001451951918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5416853265524529200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c728664f8e616314385758e2465bafc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSound: {fileID: 3946270691027925418}
+  runSound: {fileID: 1034360888}
+  deathSound: {fileID: 491602063}
+  kickSound: {fileID: 1245936444}
+  hitSounds:
+  - {fileID: 1103371219}
+  - {fileID: 443372206}
+  - {fileID: 1317381993}
+  hitEffect: {fileID: 1656412979657897604}
+  animator: {fileID: 4037574334286712377}
 --- !u!114 &5879890477837972460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7222,7 +7244,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkingSpeed: 6
   runningFactor: 2
-  punchRange: 2
   charName: {fileID: 8493704948224446101}
 --- !u!114 &2506745891054144280
 MonoBehaviour:
@@ -7256,32 +7277,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 200
   hitAnimationDelay: 0.4
-  healthbarAnimationDelay: 0.1
   healthbarUpdateSpeedSeconds: 0.5
   healthbarForegroundImage: {fileID: 1840174443892172550}
   gameOverCanvas: {fileID: 0}
---- !u!114 &1315304001451951918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5416853265524529200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c728664f8e616314385758e2465bafc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSound: {fileID: 3946270691027925418}
-  runSound: {fileID: 1034360888}
-  deathSound: {fileID: 491602063}
-  kickSound: {fileID: 1245936444}
-  hitSounds:
-  - {fileID: 1103371219}
-  - {fileID: 443372206}
-  - {fileID: 1317381993}
-  hitEffect: {fileID: 1656412979657897604}
-  animator: {fileID: 4037574334286712377}
 --- !u!1 &5692372513839650270
 GameObject:
   m_ObjectHideFlags: 0
