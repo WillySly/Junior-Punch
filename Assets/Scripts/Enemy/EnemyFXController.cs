@@ -17,6 +17,7 @@ public class EnemyFXController : MonoBehaviour
 
     bool isHit = false; // to check which sound to playe, hit or reach
     bool busy = false;
+    bool engagedInCombat = false;
 
 
     void Start()
@@ -64,17 +65,21 @@ public class EnemyFXController : MonoBehaviour
 
     public void Attack()
     {
-        animator.SetTrigger("attack");
-        animator.SetBool("isRunning", false);
 
-        runSound.enabled = false;
-        walkSound.enabled = false;
+        if (engagedInCombat)
+        {
+            animator.SetTrigger("attack");
+            animator.SetBool("isRunning", false);
+
+            runSound.enabled = false;
+            walkSound.enabled = false;
+        }
     }
 
 
     void Hit(int points)
     {
-        isHit = true;
+        if (engagedInCombat) isHit = true;
     }
 
     void PlayEnemyDyingSounds()
@@ -120,6 +125,10 @@ public class EnemyFXController : MonoBehaviour
         }
     }
 
+    public void EngageInCombat()
+    {
+        engagedInCombat = true;
+    }
 
     public bool isBusy()
     {

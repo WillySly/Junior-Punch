@@ -41,7 +41,6 @@ public class EnemyAI : MonoBehaviour
         FXController = GetComponent<EnemyFXController>();
         if (FXController != null)
             SetState(state.idle);
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         navMeshAgent = GetComponent<NavMeshAgent>();
         enemyCombat = GetComponent<EnemyCombat>();
 
@@ -80,6 +79,7 @@ public class EnemyAI : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
                 {
+                    player = target;
                     SetState(state.chase);
                 }
 
@@ -112,7 +112,8 @@ public class EnemyAI : MonoBehaviour
 
     public void Chase()
     {
-
+        if (player != null)
+        {
             if (IsInMeleeRangeOf(player))
             {
                 RotateTowards(player);
@@ -155,11 +156,12 @@ public class EnemyAI : MonoBehaviour
                 {
                     Stop();
                     reachedPlayer = true;
+                    FXController.EngageInCombat();
                     enemyCombat.EngageInCombat();
                 }
             }
+        }
 
-        
     }
 
     void Patroling()

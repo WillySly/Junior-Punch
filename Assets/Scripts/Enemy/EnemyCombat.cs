@@ -22,10 +22,8 @@ public class EnemyCombat : MonoBehaviour
 
     float cooldown; // attack cooldown
 
-    EnemyFXController FXController;
     private void Awake()
     {
-        FXController = GetComponent<EnemyFXController>();
         engagedInCombat = false;
         cooldown = 0;
     }
