@@ -11,7 +11,6 @@ public class PlayerFXController : MonoBehaviour
     [SerializeField] AudioSource[] hitSounds;
 
     [SerializeField] ParticleSystem hitEffect;
-
     [SerializeField] Animator animator;
 
     void Start()

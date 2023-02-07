@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EnemyCombat : MonoBehaviour
 {
@@ -12,12 +13,14 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask playerLayer;
 
+    public static event Action<int> enemyHitEvent;
+    public static event Action enemyAttackEvent;
+
 
     enum state { attack, cooldown, notEnagged }
     bool engagedInCombat;
 
     float cooldown; // attack cooldown
-    state currentState;
 
     EnemyFXController FXController;
     private void Awake()
@@ -43,19 +46,18 @@ public class EnemyCombat : MonoBehaviour
     {
         if (cooldown <= 0)
         {
-
-            FXController.Reach();
             SetState(state.attack);
             Collider[] target = Physics.OverlapSphere(attackPoint.position, attackRange, playerLayer);
 
             foreach (Collider player in target)
             {
-                player.GetComponent<PlayerHealth>().gotHit(attackDamage);
-                FXController.Hit();
+                if (enemyHitEvent != null)
+                {
+                    enemyHitEvent(attackDamage);
+                }
             }
 
             SetState(state.cooldown);
-            StartCoroutine(adjustAttackToAnimation());
         }
         else
         {
@@ -65,26 +67,23 @@ public class EnemyCombat : MonoBehaviour
 
     void SetState(state state)
     {
-        currentState = state;
         switch (state)
         {
             case state.attack:
-                FXController.Attack();
+                if (enemyAttackEvent != null)
+                {
+                    enemyAttackEvent();
+                }
                 break;
             case state.cooldown:
                 cooldown = attackCooldownTime;
                 break;
             case state.notEnagged:
-                FXController.NotEngaged();
                 cooldown = 0;
                 break;
         }
     }
-    IEnumerator adjustAttackToAnimation()
-    {
-        yield return new WaitForSeconds(attackAnimationDelay);
-
-    }
+ 
 
     public float GetAttackRange()
     {

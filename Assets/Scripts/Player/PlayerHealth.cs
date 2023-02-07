@@ -10,11 +10,14 @@ public class PlayerHealth : Health
     [SerializeField] GameObject gameOverCanvas;
 
     public static event Action playerDeathEvent;
-    public static event Action<int, float> playerHitEvent;
+    public static event Action<int, float> playerDamageEvent;
 
     protected override void Start()
     {
         base.Start();
+
+        EnemyCombat.enemyHitEvent += gotHit;
+
     }
 
     protected override void Die()
@@ -38,15 +41,20 @@ public class PlayerHealth : Health
     {
         base.gotHit(points);
 
-        if (playerHitEvent != null)
+        if (playerDamageEvent != null)
         {
-            playerHitEvent(points, hitAnimationDelay + healthbarAnimationDelay);
+            playerDamageEvent(points, hitAnimationDelay + healthbarAnimationDelay);
         }
     }
 
     private void DyingAnimationFinished()
     {
         gameOverCanvas.SetActive(true);
+    }
+
+    public void OnDestroy()
+    {
+        EnemyCombat.enemyHitEvent -= gotHit;
     }
 
 }

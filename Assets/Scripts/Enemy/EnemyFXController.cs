@@ -13,14 +13,13 @@ public class EnemyFXController : MonoBehaviour
     [SerializeField] ParticleSystem hitEffect;
     [SerializeField] Animator animator;
 
+    bool isHit = false; // to check which sound to playe, hit or reach
 
     void Start()
     {
-        Debug.Log(Time.time + " FXController in start");
-        Debug.Log(Time.time + " animator is " + animator.isActiveAndEnabled);
-
-        if (animator == null) Debug.Log(Time.time + " Animator is null");
         EnemyHealth.enemyDeathEvent += PlayEnemyDyingSounds;
+        EnemyCombat.enemyHitEvent += Hit;
+        EnemyCombat.enemyAttackEvent += Attack;
     }
 
 
@@ -69,37 +68,9 @@ public class EnemyFXController : MonoBehaviour
     }
 
 
-    public void NotEngaged()
+    void Hit(int points)
     {
-        animator.ResetTrigger("attack");
-    }
-
-    public void Hit()
-    {
-        hitEffect.Play();
-        int index = Random.Range(0, 2);
-
-        if (!hitSounds[index].enabled)
-        {
-            hitSounds[index].enabled = true;
-        }
-        else
-        {
-            hitSounds[index].Play();
-        }
-    }
-
-    public void Reach()
-    {
-        reachSound.enabled = true;
-        if (!reachSound.enabled)
-        {
-            reachSound.enabled = true;
-        }
-        else
-        {
-            reachSound.Play();
-        }
+        isHit = true;
     }
 
     void PlayEnemyDyingSounds()
@@ -112,9 +83,45 @@ public class EnemyFXController : MonoBehaviour
         boneShutterSound.enabled = true;
     }
 
+
+    public void SkeletonReachEvent()
+    {
+        if (isHit)
+        {
+            hitEffect.Play();
+            int index = Random.Range(0, 2);
+
+            if (!hitSounds[index].enabled)
+            {
+                hitSounds[index].enabled = true;
+            }
+            else
+            {
+                hitSounds[index].Play();
+            }
+            isHit = false;
+
+        }
+        else
+        {
+            reachSound.enabled = true;
+            if (!reachSound.enabled)
+            {
+                reachSound.enabled = true;
+            }
+            else
+            {
+                reachSound.Play();
+            }
+        }
+    }
+
     private void OnDestroy()
     {
         EnemyHealth.enemyDeathEvent -= PlayEnemyDyingSounds;
+        EnemyCombat.enemyHitEvent -= Hit;
+        EnemyCombat.enemyAttackEvent -= Attack;
     }
+
 
 }

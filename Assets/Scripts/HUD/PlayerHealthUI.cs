@@ -17,7 +17,7 @@ public class PlayerHealthUI : MonoBehaviour
         health = player.GetComponent<PlayerHealth>().GetHealth();
         healthText = GetComponent<TMP_Text>();
         healthText.text = "HP: " + health.ToString();
-        PlayerHealth.playerHitEvent += DecreaseHealth;
+        PlayerHealth.playerDamageEvent += DecreaseHealth;
 
     }
 
@@ -36,6 +36,6 @@ public class PlayerHealthUI : MonoBehaviour
 
     public void OnDestroy()
     {
-        PlayerHealth.playerHitEvent -= DecreaseHealth;
+        PlayerHealth.playerDamageEvent -= DecreaseHealth;
     }
 }
