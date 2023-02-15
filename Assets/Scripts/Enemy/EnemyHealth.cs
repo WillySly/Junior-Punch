@@ -6,25 +6,6 @@ using System;
 
 public class EnemyHealth : Health
 {
-    [SerializeField] float disappearDelay = 5f;
-
-    public static event Action enemyDeathEvent;
-   
-    protected override void Die()
-    {
-        base.Die();
-        GetComponent<EnemyAI>().enabled = false;
-        GetComponent<NavMeshAgent>().enabled = false;
-        GetComponent<CapsuleCollider>().enabled = false;
-
-        StartCoroutine(Disappear());
-
-        if (enemyDeathEvent != null)
-        {
-            enemyDeathEvent();
-        }
-    }
-
 
     private void EnemyFallEvent()
     {
@@ -34,11 +15,7 @@ public class EnemyHealth : Health
         }
     }
 
-    IEnumerator Disappear()
-    {
-        yield return new WaitForSeconds(disappearDelay);
-        Destroy(gameObject);
-    }
+
 
 
 }

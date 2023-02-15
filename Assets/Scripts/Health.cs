@@ -18,18 +18,14 @@ public class Health : MonoBehaviour
     protected Animator animator;
     protected int initHealth;
 
+    public static event Action<GameObject> deathEvent;
+
 
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
         initHealth = health;
         healthbar = transform.Find("Healthbar");
-    }
-
-    protected virtual void Die()
-    {
-        animator.SetBool("isDead", true);
-        GetComponent<Collider>().enabled = false;
     }
 
     protected IEnumerator updateHealthbar()
@@ -58,7 +54,7 @@ public class Health : MonoBehaviour
 
         if (health <= 0)
         {
-            Die();
+            deathEvent(gameObject);
         }
     }
 

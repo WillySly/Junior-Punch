@@ -22,7 +22,7 @@ public class EnemyFXController : MonoBehaviour
 
     void Start()
     {
-        EnemyHealth.enemyDeathEvent += PlayEnemyDyingSounds;
+        EnemyAI.enemyDeathEvent += PlayEnemyDyingSounds;
         EnemyCombat.enemyHitEvent += Hit;
         EnemyCombat.enemyAttackEvent += Attack;
     }
@@ -143,7 +143,7 @@ public class EnemyFXController : MonoBehaviour
 
     private void OnDestroy()
     {
-        EnemyHealth.enemyDeathEvent -= PlayEnemyDyingSounds;
+        EnemyAI.enemyDeathEvent -= PlayEnemyDyingSounds;
         EnemyCombat.enemyHitEvent -= Hit;
         EnemyCombat.enemyAttackEvent -= Attack;
     }

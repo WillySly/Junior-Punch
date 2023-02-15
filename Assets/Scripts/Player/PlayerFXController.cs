@@ -17,7 +17,7 @@ public class PlayerFXController : MonoBehaviour
 
     void Start()
     {
-        PlayerHealth.playerDeathEvent += PlayDyingSounds;
+        PlayerController.playerDeathEvent += PlayDyingSounds;
         PlayerCombat.playerAttackEvent += Attack;
         PlayerCombat.playerHitEvent += Hit;
         PlayerCombat.playerKickEvent += Kick;
@@ -100,7 +100,7 @@ public class PlayerFXController : MonoBehaviour
 
     private void OnDestroy()
     {
-        PlayerHealth.playerDeathEvent -= PlayDyingSounds;
+        PlayerController.playerDeathEvent -= PlayDyingSounds;
         PlayerCombat.playerAttackEvent -= Attack;
         PlayerCombat.playerHitEvent -= Hit;
         PlayerCombat.playerKickEvent -= Kick;

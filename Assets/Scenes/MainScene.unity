@@ -15541,6 +15541,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -27.261576
       objectReference: {fileID: 0}
+    - target: {fileID: 5879890477837972460, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
+      propertyPath: gameOverCanvas
+      value: 
+      objectReference: {fileID: 2053369428}
     - target: {fileID: 6032691938423224335, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 22.326712
@@ -15579,7 +15583,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6340684664320298651, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
       propertyPath: health
-      value: 200
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6340684664320298651, guid: 15c310d0b1aa03642af2d9e5f0ddf295, type: 3}
       propertyPath: gameOverCanvas

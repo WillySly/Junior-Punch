@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Character
 {
 
     [SerializeField] float walkingSpeed = 10;
@@ -14,9 +14,13 @@ public class PlayerController : MonoBehaviour
     PlayerFXController FXController;
      
     string playerName = "Duffy the Skeleton Slaya";
+    [SerializeField] GameObject gameOverCanvas;
 
     float cameraMouseDistanceFactor = 3f; // safeguard for mouse/camera overlap
     bool rotate = true; // mouse over player hover flag
+
+    public static event Action playerDeathEvent;
+
 
     void Start()
     {
@@ -91,6 +95,36 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = new Vector3(mousePosition.x - playerPosition.x, 0, mousePosition.z - playerPosition.z);
         transform.forward = direction;
     }
+
+
+    protected override void Die(GameObject gameObject)
+    {
+        if (gameObject == this.gameObject)
+        {
+            PlayerController pc = GetComponent<PlayerController>();
+            pc.enabled = false;
+
+            PlayerCombat pcombat = GetComponent<PlayerCombat>();
+            pcombat.enabled = false;
+
+            GetComponent<CapsuleCollider>().enabled = false;
+
+            base.Die(gameObject);
+
+            if (playerDeathEvent != null)
+            {
+                playerDeathEvent();
+            }
+        }
+       
+
+    }
+
+        private void DyingAnimationFinished()
+    {
+        gameOverCanvas.SetActive(true);
+    }
+
 
 }
 

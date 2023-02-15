@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : Character
 {
     [SerializeField] LayerMask playerMask;
     [SerializeField] LayerMask obstacleMask;
@@ -23,6 +24,9 @@ public class EnemyAI : MonoBehaviour
     Transform player;
     NavMeshAgent navMeshAgent;
     EnemyCombat enemyCombat;
+
+    public static event Action enemyDeathEvent;
+
 
     enum state { walk, idle, chase }
     state currentState;
@@ -226,6 +230,24 @@ public class EnemyAI : MonoBehaviour
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+    }
+
+    protected override void Die(GameObject gameObject)
+    {
+        if (gameObject == this.gameObject)
+        {
+            base.Die(gameObject);
+            GetComponent<EnemyAI>().enabled = false;
+            GetComponent<NavMeshAgent>().enabled = false;
+            GetComponent<CapsuleCollider>().enabled = false;
+
+            StartCoroutine(base.Disappear());
+
+            if (enemyDeathEvent != null)
+            {
+                enemyDeathEvent();
+            }
+        }
     }
 
     public void SetWaypoints(List<Transform> wp)
