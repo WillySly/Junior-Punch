@@ -8,46 +8,28 @@ using System;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] protected int health;
+    [SerializeField] public int health;
     [SerializeField] protected float hitAnimationDelay = 0.3f;
-    [SerializeField] protected float healthbarUpdateSpeedSeconds = 0.5f;
-    [SerializeField] protected Image healthbarForegroundImage;
+
 
     protected float healthbarAnimationDelay = 0.1f;
-    protected Transform healthbar;
     protected Animator animator;
-    protected int initHealth;
 
     public static event Action<GameObject> deathEvent;
+    public static event Action<int, GameObject> updateHealthEvent;
 
 
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
-        initHealth = health;
-        healthbar = transform.Find("Healthbar");
     }
 
-    protected IEnumerator updateHealthbar()
-    {
-        float pct = (float)health / (float)initHealth;
-        float currHealth = healthbarForegroundImage.fillAmount;
-        float elapsed = 0f;
 
-        while (elapsed < healthbarUpdateSpeedSeconds)
-        {
-            elapsed += Time.deltaTime;
-            healthbarForegroundImage.fillAmount = Mathf.Lerp(currHealth, pct, elapsed / healthbarUpdateSpeedSeconds);
-            yield return null;
-        }
-
-        healthbarForegroundImage.fillAmount = pct;
-        animator.ResetTrigger("isHurt");
-    }
 
     public virtual void gotHit(int points)
     {
         health -= points;
+        Debug.Log("gotHit");
 
         // Animations are not synced with logic, so we make them wait
         StartCoroutine(playHitAnimation());
@@ -69,14 +51,12 @@ public class Health : MonoBehaviour
         yield return new WaitForSeconds(hitAnimationDelay);
         animator.SetTrigger("isHurt");
         yield return new WaitForSeconds(healthbarAnimationDelay);
-        StartCoroutine(updateHealthbar());
+        updateHealthEvent(health, gameObject);
+
     }
 
 
-    void LateUpdate()
-    {
-        healthbar.LookAt(Camera.main.transform);
-    }
+
 
 
 

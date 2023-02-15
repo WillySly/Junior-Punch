@@ -19,6 +19,8 @@ public class EnemyFXController : MonoBehaviour
     bool busy = false;
     bool engagedInCombat = false; //to play hit and attack only if engaged in combat
 
+    public static event Action enemyFallEvent;
+
 
     void Start()
     {
@@ -97,6 +99,7 @@ public class EnemyFXController : MonoBehaviour
     private void EnemyFallEvent()
     {
         boneShutterSound.enabled = true;
+        enemyFallEvent();
     }
 
 
@@ -170,5 +173,6 @@ public class EnemyFXController : MonoBehaviour
     {
         busy = true;
     }
+
 
 }

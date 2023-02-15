@@ -4069,7 +4069,7 @@ GameObject:
   - component: {fileID: 3158043764626445063}
   - component: {fileID: 8558471226208664294}
   - component: {fileID: 8558471226208664300}
-  - component: {fileID: 8558471226208664302}
+  - component: {fileID: 5883387831086089124}
   m_Layer: 7
   m_Name: Weaponless Skeleton
   m_TagString: Untagged
@@ -4209,6 +4209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49c37cbb0293d04985319af12b06586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disappearDelay: 5
   playerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -4244,7 +4245,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
---- !u!114 &8558471226208664302
+--- !u!114 &5883387831086089124
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4253,15 +4254,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7911724690802240391}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6a66a7943ed1d946a70fee1ce803368, type: 3}
+  m_Script: {fileID: 11500000, guid: f74782146f8b3e44fb63cd2a4d846967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  hitAnimationDelay: 0.1
-  healthbarAnimationDelay: 0.1
-  healthbarUpdateSpeedSeconds: 0.5
-  healthbarForegroundImage: {fileID: 8558471225460132395}
-  disappearDelay: 3
+  hitAnimationDelay: 0.3
 --- !u!1 &7911724690802240393
 GameObject:
   m_ObjectHideFlags: 0
@@ -5836,6 +5833,7 @@ GameObject:
   - component: {fileID: 8558471226084964770}
   - component: {fileID: 8558471226084964771}
   - component: {fileID: 8558471226084964768}
+  - component: {fileID: 2910077061644674980}
   m_Layer: 3
   m_Name: Healthbar
   m_TagString: Untagged
@@ -5927,6 +5925,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2910077061644674980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8558471226084964798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 897c13d71766d5640afa2589aeaf0184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthbarForegroundImage: {fileID: 8558471225460132395}
+  healthbarUpdateSpeedSeconds: 0.5
+  character: {fileID: 7911724690802210727}
 --- !u!1 &8558471227061471769
 GameObject:
   m_ObjectHideFlags: 0
