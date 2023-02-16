@@ -11,32 +11,33 @@ public class Health : MonoBehaviour
     [SerializeField] public int health;
     [SerializeField] protected float hitAnimationDelay = 0.3f;
 
-
     protected float healthbarAnimationDelay = 0.1f;
     protected Animator animator;
 
-    public static event Action<GameObject> deathEvent;
-    public static event Action<int, GameObject> updateHealthEvent;
+    public event Action deathEvent;
+    public static event Action deathStaticEvent;
+    public event Action<int> updateHealthEvent;
 
+    private void OnEnable()
+    {
+        GetComponent<Combat>().gotHitEvent += gotHit;
+    }
 
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-
-
-    public virtual void gotHit(int points)
+    protected virtual void gotHit(int points)
     {
         health -= points;
-        Debug.Log("gotHit");
 
-        // Animations are not synced with logic, so we make them wait
-        StartCoroutine(playHitAnimation());
+        updateHealthEvent?.Invoke(health);
 
         if (health <= 0)
         {
-            deathEvent(gameObject);
+            deathEvent?.Invoke();
+            deathStaticEvent?.Invoke();
         }
     }
 
@@ -45,19 +46,10 @@ public class Health : MonoBehaviour
         return health;
     }
 
-
-    IEnumerator playHitAnimation()
+    private void OnDisable()
     {
-        yield return new WaitForSeconds(hitAnimationDelay);
-        animator.SetTrigger("isHurt");
-        yield return new WaitForSeconds(healthbarAnimationDelay);
-        updateHealthEvent(health, gameObject);
-
+        GetComponent<Combat>().gotHitEvent -= gotHit;
     }
-
-
-
-
 
 
 }

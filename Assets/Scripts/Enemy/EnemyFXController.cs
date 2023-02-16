@@ -15,18 +15,19 @@ public class EnemyFXController : MonoBehaviour
     [SerializeField] Animator animator;
 
 
-    bool isHit = false; // to check which sound to play, hit or reach
+    bool strikeHit = false; // to check which sound to play, hit or reach
     bool busy = false;
     bool engagedInCombat = false; //to play hit and attack only if engaged in combat
 
-    public static event Action enemyFallEvent;
+    public event Action enemyFallEvent;
 
 
-    void Start()
+    void OnEnable()
     {
-        EnemyAI.enemyDeathEvent += PlayEnemyDyingSounds;
-        EnemyCombat.enemyHitEvent += Hit;
+        GetComponent<Health>().deathEvent += PlayEnemyDyingSounds;
+        GetComponent<Combat>().strikeEvent += Strike;
         EnemyCombat.enemyAttackEvent += Attack;
+        GetComponent<Combat>().gotHitEvent += GotHit;
     }
 
 
@@ -63,6 +64,11 @@ public class EnemyFXController : MonoBehaviour
         }
     }
 
+    private void GotHit(int points)
+    {
+        animator.SetTrigger("isHurt");
+
+    }
 
     public void Attack()
     {
@@ -77,14 +83,15 @@ public class EnemyFXController : MonoBehaviour
     }
 
 
-    void Hit(int points)
+    void Strike()
     {
-        if (engagedInCombat) isHit = true;
+        if (engagedInCombat) strikeHit = true;
     }
+
 
     void PlayEnemyDyingSounds()
     {
-
+        Debug.Log("inFxControleller playDyingSounds");
         if (engagedInCombat)
         {
             animator.SetBool("isDead", true);
@@ -105,7 +112,7 @@ public class EnemyFXController : MonoBehaviour
 
     public void SkeletonReachEvent()
     {
-        if (isHit)
+        if (strikeHit)
         {
             hitEffect.Play();
             int index = UnityEngine.Random.Range(0, 2);
@@ -118,7 +125,7 @@ public class EnemyFXController : MonoBehaviour
             {
                 hitSounds[index].Play();
             }
-            isHit = false;
+            strikeHit = false;
         }
         else
         {
@@ -144,10 +151,10 @@ public class EnemyFXController : MonoBehaviour
         return busy;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        EnemyAI.enemyDeathEvent -= PlayEnemyDyingSounds;
-        EnemyCombat.enemyHitEvent -= Hit;
+        GetComponent<Health>().deathEvent -= PlayEnemyDyingSounds;
+        GetComponent<Combat>().strikeEvent -= Strike;
         EnemyCombat.enemyAttackEvent -= Attack;
     }
 

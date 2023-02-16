@@ -12,15 +12,12 @@ public class PlayerController : Character
     [SerializeField] TMP_Text charName;
 
     PlayerFXController FXController;
-     
+
     string playerName = "Duffy the Skeleton Slaya";
     [SerializeField] GameObject gameOverCanvas;
 
     float cameraMouseDistanceFactor = 3f; // safeguard for mouse/camera overlap
     bool rotate = true; // mouse over player hover flag
-
-    public static event Action playerDeathEvent;
-
 
     void Start()
     {
@@ -62,7 +59,7 @@ public class PlayerController : Character
         {
             walkingSpeed /= runningFactor;
             FXController.StopRunning();
-  
+
         }
 
     }
@@ -97,30 +94,20 @@ public class PlayerController : Character
     }
 
 
-    protected override void Die(GameObject gameObject)
+    protected override void Die()
     {
-        if (gameObject == this.gameObject)
-        {
-            PlayerController pc = GetComponent<PlayerController>();
-            pc.enabled = false;
+        base.Die();
+        PlayerController pc = GetComponent<PlayerController>();
+        pc.enabled = false;
 
-            PlayerCombat pcombat = GetComponent<PlayerCombat>();
-            pcombat.enabled = false;
+        PlayerCombat pcombat = GetComponent<PlayerCombat>();
+        pcombat.enabled = false;
 
-            GetComponent<CapsuleCollider>().enabled = false;
-
-            base.Die(gameObject);
-
-            if (playerDeathEvent != null)
-            {
-                playerDeathEvent();
-            }
-        }
-       
+        GetComponent<CapsuleCollider>().enabled = false;
 
     }
 
-        private void DyingAnimationFinished()
+    private void DyingAnimationFinished()
     {
         gameOverCanvas.SetActive(true);
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EnemyCombat : MonoBehaviour
+public class EnemyCombat : Combat
 {
     [SerializeField] int attackDamage = 20;
     [SerializeField] float attackRange = 2f;
@@ -13,7 +13,6 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask playerLayer;
 
-    public static event Action<int> enemyHitEvent;
     public static event Action enemyAttackEvent;
 
 
@@ -49,10 +48,9 @@ public class EnemyCombat : MonoBehaviour
 
             foreach (Collider player in target)
             {
-                if (enemyHitEvent != null)
-                {
-                    enemyHitEvent(attackDamage);
-                }
+                player.gameObject.GetComponent<PlayerCombat>().GotHit(attackDamage);
+                Strike();
+
             }
 
             SetState(state.cooldown);
@@ -81,7 +79,7 @@ public class EnemyCombat : MonoBehaviour
                 break;
         }
     }
- 
+
 
     public float GetAttackRange()
     {

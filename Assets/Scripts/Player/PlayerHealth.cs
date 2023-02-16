@@ -7,33 +7,19 @@ using System;
 
 public class PlayerHealth : Health
 {
-
-
-    public static event Action<int, float> playerDamageEvent;
-
     private void OnEnable()
     {
-        EnemyCombat.enemyHitEvent += gotHit;
+        GetComponent<Combat>().gotHitEvent += gotHit;
     }
 
-
-
-    public override void gotHit(int points)
+    protected override void gotHit(int points)
     {
         base.gotHit(points);
-
-        if (playerDamageEvent != null)
-        {
-            playerDamageEvent(points, hitAnimationDelay + healthbarAnimationDelay);
-        }
     }
-
-
-
 
     private void OnDisable()
     {
-        EnemyCombat.enemyHitEvent -= gotHit;
+        GetComponent<Combat>().gotHitEvent -= gotHit;
 
     }
 

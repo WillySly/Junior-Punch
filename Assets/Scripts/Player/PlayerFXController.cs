@@ -13,14 +13,15 @@ public class PlayerFXController : MonoBehaviour
     [SerializeField] ParticleSystem hitEffect;
     [SerializeField] Animator animator;
 
-    bool isHit = false;
+    bool strikeHit = false;
 
-    void Start()
+    void OnEnable()
     {
-        PlayerController.playerDeathEvent += PlayDyingSounds;
+        GetComponent<Health>().deathEvent += PlayDyingSounds;
         PlayerCombat.playerAttackEvent += Attack;
-        PlayerCombat.playerHitEvent += Hit;
+        GetComponent<Combat>().strikeEvent += Strike;
         PlayerCombat.playerKickEvent += Kick;
+        GetComponent<Combat>().gotHitEvent += GotHit;
 
     }
 
@@ -49,14 +50,14 @@ public class PlayerFXController : MonoBehaviour
         runSound.enabled = false;
     }
 
-    public void Hit()
+    public void Strike()
     {
-        isHit = true;
+        strikeHit = true;
     }
 
     public void Kick()
     {
-        if (isHit)
+        if (strikeHit)
         {
             hitEffect.Play();
 
@@ -70,7 +71,7 @@ public class PlayerFXController : MonoBehaviour
             {
                 hitSounds[index].Play();
             }
-            isHit = false;
+            strikeHit = false;
         }
         else
         {
@@ -91,6 +92,11 @@ public class PlayerFXController : MonoBehaviour
         animator.SetTrigger("attack");
     }
 
+    void GotHit(int points)
+    {
+        animator.SetTrigger("isHurt");
+    }
+
     void PlayDyingSounds()
     {
         animator.SetBool("isDead", true);
@@ -98,11 +104,11 @@ public class PlayerFXController : MonoBehaviour
         deathSound.enabled = true;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        PlayerController.playerDeathEvent -= PlayDyingSounds;
+        GetComponent<Health>().deathEvent -= PlayDyingSounds;
         PlayerCombat.playerAttackEvent -= Attack;
-        PlayerCombat.playerHitEvent -= Hit;
+        GetComponent<Combat>().strikeEvent -= Strike;
         PlayerCombat.playerKickEvent -= Kick;
     }
 

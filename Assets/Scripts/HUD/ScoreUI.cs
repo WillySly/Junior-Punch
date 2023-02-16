@@ -9,9 +9,13 @@ public class ScoreUI : MonoBehaviour
     int score = 0;
     TMP_Text scoreText;
 
+    private void OnEnable()
+    {
+        Health.deathStaticEvent += IncreaseScore;
+    }
     void Start()
     {
-        EnemyAI.enemyDeathEvent += IncreaseScore;
+      
         scoreText = GetComponent<TMP_Text>();
         scoreText.text = "Slayed: " + score.ToString();
     }
@@ -21,5 +25,10 @@ public class ScoreUI : MonoBehaviour
         score++;
         scoreText.text = "Slayed: " + score.ToString();
 
+    }
+
+    private void OnDisable()
+    {
+        Health.deathStaticEvent -= IncreaseScore;
     }
 }

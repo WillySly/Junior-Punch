@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerCombat : MonoBehaviour
+public class PlayerCombat : Combat
 {
     [SerializeField] float attackRange = 2f;
     [SerializeField] int attackDamage = 20;
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask enemyLayer;
 
-    public static event Action playerHitEvent;
     public static event Action playerKickEvent;
     public static event Action playerAttackEvent;
 
@@ -25,26 +24,21 @@ public class PlayerCombat : MonoBehaviour
 
     void Attack()
     {
-        if (playerAttackEvent != null)
-        {
-            playerAttackEvent();
-        }
+
+        playerAttackEvent?.Invoke();
 
         Collider[] enemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
 
         foreach (Collider enemy in enemies)
         {
-            enemy.GetComponent<Health>().gotHit(attackDamage);
-            if (playerHitEvent != null)
-            {
-                playerHitEvent();
-            }
+
+            Strike();
+            enemy.gameObject.GetComponent<EnemyCombat>().GotHit(attackDamage);
+
         }
 
-        if (playerKickEvent != null)
-        {
-            playerKickEvent();
-        }
+        playerKickEvent?.Invoke();
+
     }
 
     private void OnDrawGizmosSelected()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Character : MonoBehaviour
 {
@@ -8,31 +9,23 @@ public class Character : MonoBehaviour
 
     private void OnEnable()
     {
-        Health.deathEvent += Die;
+        GetComponent<Health>().deathEvent += Die;
     }
-
-    private void Start()
-    {
-       
-
-    }
-
-
-    protected virtual void Die(GameObject gameObject)
+    protected virtual void Die()
     {
         GetComponent<Collider>().enabled = false;
-
     }
 
     protected IEnumerator Disappear()
     {
+        
         yield return new WaitForSeconds(disappearDelay);
         Destroy(gameObject);
     }
 
     private void OnDisable()
     {
-        Health.deathEvent -= Die;
+        GetComponent<Health>().deathEvent -= Die;
     }
 
 

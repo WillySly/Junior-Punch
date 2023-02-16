@@ -25,8 +25,6 @@ public class EnemyAI : Character
     NavMeshAgent navMeshAgent;
     EnemyCombat enemyCombat;
 
-    public static event Action enemyDeathEvent;
-
 
     enum state { walk, idle, chase }
     state currentState;
@@ -232,22 +230,16 @@ public class EnemyAI : Character
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 
-    protected override void Die(GameObject gameObject)
+    protected override void Die()
     {
-        if (gameObject == this.gameObject)
-        {
-            base.Die(gameObject);
+
+            base.Die();
             GetComponent<EnemyAI>().enabled = false;
             GetComponent<NavMeshAgent>().enabled = false;
             GetComponent<CapsuleCollider>().enabled = false;
 
-            StartCoroutine(base.Disappear());
-
-            if (enemyDeathEvent != null)
-            {
-                enemyDeathEvent();
-            }
-        }
+            StartCoroutine(Disappear());
+        
     }
 
     public void SetWaypoints(List<Transform> wp)

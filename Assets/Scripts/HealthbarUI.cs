@@ -7,16 +7,15 @@ public class HealthbarUI : MonoBehaviour
 {
     [SerializeField] Image healthbarForegroundImage;
     [SerializeField] float healthbarUpdateSpeedSeconds = 0.5f;
-    [SerializeField] Transform character;
+    [SerializeField] protected Transform character;
 
 
     Animator animator;
     int initHealth;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
-        Health.updateHealthEvent += UpdateHealth;
-        EnemyFXController.enemyFallEvent += EnemyFallEvent;
+        character.GetComponent<Health>().updateHealthEvent += UpdateHealth;
     }
 
     void Start()
@@ -25,15 +24,13 @@ public class HealthbarUI : MonoBehaviour
         initHealth = character.GetComponent<Health>().health;
     }
 
-    void  UpdateHealth(int health, GameObject gameObject)
+    void  UpdateHealth(int health)
     {
-        StartCoroutine(UpdateHealthbar(health, gameObject));
+        StartCoroutine(UpdateHealthbar(health));
     }
 
-    IEnumerator UpdateHealthbar(int health, GameObject gameObject)
+    IEnumerator UpdateHealthbar(int health)
     {
-        if (gameObject == character.gameObject)
-        {
             float pct = (float)health / (float)initHealth;
             float currHealth = healthbarForegroundImage.fillAmount;
             float elapsed = 0f;
@@ -45,27 +42,19 @@ public class HealthbarUI : MonoBehaviour
                 yield return null;
             }
 
-            healthbarForegroundImage.fillAmount = pct;
-            animator.ResetTrigger("isHurt");
-        }
-
+            healthbarForegroundImage.fillAmount = pct;      
     }
+
     void LateUpdate()
     {
         transform.LookAt(Camera.main.transform);
     }
 
-    private void OnDisable()
+     protected virtual void OnDisable()
     {
-        Health.updateHealthEvent -= UpdateHealth;
-        EnemyFXController.enemyFallEvent -= EnemyFallEvent;
+        character.GetComponent<Health>().updateHealthEvent -= UpdateHealth;  
+            
     }
 
-    private void EnemyFallEvent()
-    {
-        if (transform != null)
-        {
-            transform.gameObject.SetActive(false);
-        }
-    }
+
 }
