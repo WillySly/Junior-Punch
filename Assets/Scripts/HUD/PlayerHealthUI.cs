@@ -13,19 +13,19 @@ public class PlayerHealthUI : MonoBehaviour
 
     private void OnEnable()
     {
-        player.GetComponent<Health>().updateHealthEvent += DecreaseHealth;
+        player.GetComponent<Health>().updateHealthEvent += UpdateHealth;
     }
     void Start()
     {
-        health = player.GetComponent<PlayerHealth>().GetHealth();
+        health = player.GetComponent<Health>().GetHealth();
         healthText = GetComponent<TMP_Text>();
         healthText.text = "HP: " + health.ToString();
 
     }
 
-    public void DecreaseHealth(int delta)
+    public void UpdateHealth(int newHealth)
     {
-        health -= delta;
+        health  = newHealth;
         if (health < 0) health = 0;
         healthText.text = "HP: " + health.ToString();
     }
@@ -33,6 +33,6 @@ public class PlayerHealthUI : MonoBehaviour
  
     public void OnDestroy()
     {
-        player.GetComponent<Health>().updateHealthEvent -= DecreaseHealth;
+        player.GetComponent<Health>().updateHealthEvent -= UpdateHealth;
     }
 }

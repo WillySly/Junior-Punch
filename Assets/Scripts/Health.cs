@@ -20,7 +20,7 @@ public class Health : MonoBehaviour
 
     private void OnEnable()
     {
-        GetComponent<Combat>().gotHitEvent += gotHit;
+        GetComponent<Combat>().gotHitEvent += GotHit;
     }
 
     protected virtual void Start()
@@ -28,7 +28,7 @@ public class Health : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    protected virtual void gotHit(int points)
+    protected virtual void GotHit(int points)
     {
         health -= points;
 
@@ -48,7 +48,7 @@ public class Health : MonoBehaviour
 
     private void OnDisable()
     {
-        GetComponent<Combat>().gotHitEvent -= gotHit;
+        GetComponent<Combat>().gotHitEvent -= GotHit;
     }
 
 
