@@ -25,6 +25,10 @@ public class EnemyAI : Character
     NavMeshAgent navMeshAgent;
     EnemyCombat enemyCombat;
 
+    public event Action walk;
+    public event Action idle;
+    public event Action<bool> chase;
+    public event Action engageInCombat;
 
     enum state { walk, idle, chase }
     state currentState;
@@ -34,16 +38,19 @@ public class EnemyAI : Character
     float rotationSpeed = 10f;
 
     bool reachedPlayer;
+    bool animationPlaying;
 
     Vector3 targetLastPosition; // to check whether player moved
 
-    EnemyFXController FXController;
+    private void OnEnable()
+    {
+        GetComponent<EnemyFXController>().isBusy += AnimationPlaying;
+
+    }
 
     void Start()
     {
-        FXController = GetComponent<EnemyFXController>();
-        if (FXController != null)
-            SetState(state.idle);
+        SetState(state.idle);
         navMeshAgent = GetComponent<NavMeshAgent>();
         enemyCombat = GetComponent<EnemyCombat>();
 
@@ -97,16 +104,16 @@ public class EnemyAI : Character
         switch (state)
         {
             case state.walk:
-                FXController.Walk();
+                walk?.Invoke();
                 break;
             case state.idle:
-                FXController.Idle();
+                idle?.Invoke();
                 break;
             case state.chase:
-                FXController.Chase(reachedPlayer);
+                chase?.Invoke(reachedPlayer);
                 break;
             default:
-                FXController.Idle();
+                idle?.Invoke();
                 break;
         }
     }
@@ -118,7 +125,7 @@ public class EnemyAI : Character
         {
             if (IsInMeleeRangeOf(player))
             {
-                FXController.EngageInCombat();
+                engageInCombat?.Invoke();
                 RotateTowards(player);
             }
 
@@ -132,7 +139,7 @@ public class EnemyAI : Character
             {
                 // if in attack or damage animation, wait for animation to stop and chase again
 
-                if (!FXController.isBusy())
+                if (!animationPlaying)
                 {
                     SetState(state.chase);
                     navMeshAgent.SetDestination(player.position);
@@ -155,7 +162,7 @@ public class EnemyAI : Character
             // if player within attack range, attack
             if (IsInMeleeRangeOf(player))
             {
-                if (!FXController.isBusy())
+                if (!animationPlaying)
                 {
                     Stop();
                     reachedPlayer = true;
@@ -247,6 +254,10 @@ public class EnemyAI : Character
         waypoints = wp;
     }
 
+    private void AnimationPlaying(bool playing)
+    {
+        animationPlaying = playing;
+    }
 
     public Vector3 DirFromAngle(float angle, bool angleIsGlobal)
     {
@@ -257,4 +268,10 @@ public class EnemyAI : Character
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
 
+
+    private void OnDisable()
+    {
+        GetComponent<EnemyFXController>().isBusy -= AnimationPlaying;
+
+    }
 }

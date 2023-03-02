@@ -17,7 +17,6 @@ public class EnemyCombat : Combat
     public static event Action strikeEvent;
 
 
-
     enum state { attack, cooldown, notEnagged }
     bool engagedInCombat;
     state currentState;

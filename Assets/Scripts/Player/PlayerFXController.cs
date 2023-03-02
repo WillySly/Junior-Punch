@@ -110,6 +110,7 @@ public class PlayerFXController : MonoBehaviour
         PlayerCombat.playerAttackEvent -= Attack;
         GetComponent<Combat>().hitEvent -= Strike;
         PlayerCombat.playerKickEvent -= Kick;
+        GetComponent<Combat>().gotHitEvent -= GotHit;
     }
 
 }

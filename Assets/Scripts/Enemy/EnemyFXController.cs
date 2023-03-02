@@ -20,6 +20,8 @@ public class EnemyFXController : MonoBehaviour
     bool engagedInCombat = false; //to play hit and attack only if engaged in combat
 
     public event Action enemyFallEvent;
+    public event Action<bool> isBusy;
+
 
 
     void OnEnable()
@@ -29,7 +31,11 @@ public class EnemyFXController : MonoBehaviour
         EnemyCombat.enemyAttackEvent += Attack;
         EnemyCombat.strikeEvent += ReachHand;
         GetComponent<Combat>().gotHitEvent += GotHit;
-        
+        GetComponent<EnemyAI>().walk += Walk;
+        GetComponent<EnemyAI>().idle += Idle;
+        GetComponent<EnemyAI>().chase += Chase;
+        GetComponent<EnemyAI>().engageInCombat += EngageInCombat;
+
     }
 
 
@@ -147,16 +153,19 @@ public class EnemyFXController : MonoBehaviour
         engagedInCombat = true;
     }
 
-    public bool isBusy()
-    {
-        return busy;
-    }
 
     private void OnDisable()
     {
         GetComponent<Health>().deathEvent -= PlayEnemyDyingSounds;
         GetComponent<Combat>().hitEvent -= Hit;
         EnemyCombat.enemyAttackEvent -= Attack;
+        EnemyCombat.strikeEvent -= ReachHand;
+        GetComponent<Combat>().gotHitEvent -= GotHit;
+        GetComponent<EnemyAI>().walk -= Walk;
+        GetComponent<EnemyAI>().idle -= Idle;
+        GetComponent<EnemyAI>().chase -= Chase;
+        GetComponent<EnemyAI>().engageInCombat -= EngageInCombat;
+
     }
 
 
@@ -164,22 +173,29 @@ public class EnemyFXController : MonoBehaviour
     private void AttackEnded()
     {
         busy = false;
+        isBusy?.Invoke(busy);
     }
 
     private void AttackStarted()
     {
         busy = true;
+        isBusy?.Invoke(busy);
+
 
     }
 
     private void DamageEnded()
     {
         busy = false;
+        isBusy?.Invoke(busy);
+
     }
 
     private void DamageStarted()
     {
         busy = true;
+        isBusy?.Invoke(busy);
+
     }
 
 
