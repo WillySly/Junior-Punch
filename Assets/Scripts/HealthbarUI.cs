@@ -10,7 +10,6 @@ public class HealthbarUI : MonoBehaviour
     [SerializeField] protected Transform character;
 
 
-    Animator animator;
     int initHealth;
 
     protected virtual void OnEnable()
@@ -20,7 +19,6 @@ public class HealthbarUI : MonoBehaviour
 
     void Start()
     {
-        animator = character.GetComponent<Animator>();
         initHealth = character.GetComponent<Health>().health;
     }
 

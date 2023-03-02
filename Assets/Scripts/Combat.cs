@@ -6,7 +6,7 @@ using System;
 public class Combat : MonoBehaviour
 {
     public event Action <int> gotHitEvent;
-    public event Action strikeEvent;
+    public event Action hitEvent;
 
 
     public void GotHit(int attackDamage)
@@ -14,8 +14,8 @@ public class Combat : MonoBehaviour
         gotHitEvent?.Invoke(attackDamage);
     }
 
-    public void Strike()
+    public void Hit()
     {
-        strikeEvent?.Invoke();
+        hitEvent?.Invoke();
     }
 }

@@ -19,7 +19,7 @@ public class PlayerFXController : MonoBehaviour
     {
         GetComponent<Health>().deathEvent += PlayDyingSounds;
         PlayerCombat.playerAttackEvent += Attack;
-        GetComponent<Combat>().strikeEvent += Strike;
+        GetComponent<Combat>().hitEvent += Strike;
         PlayerCombat.playerKickEvent += Kick;
         GetComponent<Combat>().gotHitEvent += GotHit;
 
@@ -108,7 +108,7 @@ public class PlayerFXController : MonoBehaviour
     {
         GetComponent<Health>().deathEvent -= PlayDyingSounds;
         PlayerCombat.playerAttackEvent -= Attack;
-        GetComponent<Combat>().strikeEvent -= Strike;
+        GetComponent<Combat>().hitEvent -= Strike;
         PlayerCombat.playerKickEvent -= Kick;
     }
 

@@ -31,7 +31,7 @@ public class PlayerHealthUI : MonoBehaviour
     }
 
  
-    public void OnDestroy()
+    public void OnDisable()
     {
         player.GetComponent<Health>().updateHealthEvent -= UpdateHealth;
     }

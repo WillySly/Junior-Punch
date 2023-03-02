@@ -13,6 +13,7 @@ public class PlayerCombat : Combat
     public static event Action playerKickEvent;
     public static event Action playerAttackEvent;
 
+    float attackPointRadius = 5f;
 
     void Update()
     {
@@ -24,21 +25,23 @@ public class PlayerCombat : Combat
 
     void Attack()
     {
-
         playerAttackEvent?.Invoke();
+    }
 
-        Collider[] enemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
+    public void PlayerHitEvent()
+    {
+        Debug.Log("PlayerHitEvent");
+        Collider[] enemies = Physics.OverlapSphere(attackPoint.position, attackPointRadius, enemyLayer);
 
         foreach (Collider enemy in enemies)
         {
 
-            Strike();
+            Hit();
             enemy.gameObject.GetComponent<EnemyCombat>().GotHit(attackDamage);
 
         }
 
         playerKickEvent?.Invoke();
-
     }
 
     private void OnDrawGizmosSelected()

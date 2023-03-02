@@ -57,10 +57,10 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.46229914
+      - time: 0.82563335
         functionName: PlayerHitEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: c728664f8e616314385758e2465bafc0, type: 3}
+        objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

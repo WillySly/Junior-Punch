@@ -25,9 +25,11 @@ public class EnemyFXController : MonoBehaviour
     void OnEnable()
     {
         GetComponent<Health>().deathEvent += PlayEnemyDyingSounds;
-        GetComponent<Combat>().strikeEvent += Strike;
+        GetComponent<Combat>().hitEvent += Hit;
         EnemyCombat.enemyAttackEvent += Attack;
+        EnemyCombat.strikeEvent += ReachHand;
         GetComponent<Combat>().gotHitEvent += GotHit;
+        
     }
 
 
@@ -83,7 +85,7 @@ public class EnemyFXController : MonoBehaviour
     }
 
 
-    void Strike()
+    void Hit()
     {
         if (engagedInCombat) strikeHit = true;
     }
@@ -91,7 +93,6 @@ public class EnemyFXController : MonoBehaviour
 
     void PlayEnemyDyingSounds()
     {
-        Debug.Log("inFxControleller playDyingSounds");
         if (engagedInCombat)
         {
             animator.SetBool("isDead", true);
@@ -110,7 +111,7 @@ public class EnemyFXController : MonoBehaviour
     }
 
 
-    public void SkeletonReachEvent()
+    public void ReachHand()
     {
         if (strikeHit)
         {
@@ -154,7 +155,7 @@ public class EnemyFXController : MonoBehaviour
     private void OnDisable()
     {
         GetComponent<Health>().deathEvent -= PlayEnemyDyingSounds;
-        GetComponent<Combat>().strikeEvent -= Strike;
+        GetComponent<Combat>().hitEvent -= Hit;
         EnemyCombat.enemyAttackEvent -= Attack;
     }
 

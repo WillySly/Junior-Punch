@@ -14,12 +14,16 @@ public class EnemyCombat : Combat
     [SerializeField] LayerMask playerLayer;
 
     public static event Action enemyAttackEvent;
+    public static event Action strikeEvent;
+
 
 
     enum state { attack, cooldown, notEnagged }
     bool engagedInCombat;
+    state currentState;
 
     float cooldown; // attack cooldown
+    float attackPointRadius = 5f;
 
     private void Awake()
     {
@@ -44,16 +48,7 @@ public class EnemyCombat : Combat
         if (cooldown <= 0)
         {
             SetState(state.attack);
-            Collider[] target = Physics.OverlapSphere(attackPoint.position, attackRange, playerLayer);
 
-            foreach (Collider player in target)
-            {
-                player.gameObject.GetComponent<PlayerCombat>().GotHit(attackDamage);
-                Strike();
-
-            }
-
-            SetState(state.cooldown);
         }
         else
         {
@@ -63,23 +58,41 @@ public class EnemyCombat : Combat
 
     void SetState(state state)
     {
-        switch (state)
+        if (currentState != state)
         {
-            case state.attack:
-                if (enemyAttackEvent != null)
-                {
-                    enemyAttackEvent();
-                }
-                break;
-            case state.cooldown:
-                cooldown = attackCooldownTime;
-                break;
-            case state.notEnagged:
-                cooldown = 0;
-                break;
+            currentState = state;
+            switch (state)
+            {
+                case state.attack:
+                    enemyAttackEvent?.Invoke();
+
+                    break;
+                case state.cooldown:
+                    cooldown = attackCooldownTime;
+                    break;
+                case state.notEnagged:
+                    cooldown = 0;
+                    break;
+            }
         }
+       
+       
     }
 
+    public void SkeletonReachEvent()
+    {
+        
+        Collider[] target = Physics.OverlapSphere(attackPoint.position, attackPointRadius, playerLayer);
+
+        foreach (Collider player in target)
+        {
+            Hit();
+            player.gameObject.GetComponent<PlayerCombat>().GotHit(attackDamage);
+        }
+
+        strikeEvent?.Invoke();
+        SetState(state.cooldown);
+    }
 
     public float GetAttackRange()
     {
