@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerFXController : MonoBehaviour
+public class PlayerAnimationAndFXController : MonoBehaviour
 {
     [SerializeField] public AudioSource walkSound, runSound, deathSound;
     [SerializeField] AudioSource kickSound;

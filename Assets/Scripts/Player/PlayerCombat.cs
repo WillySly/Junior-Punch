@@ -36,7 +36,7 @@ public class PlayerCombat : Combat
         {
 
             Hit();
-            enemy.gameObject.GetComponent<EnemyCombat>().GotHit(attackDamage);
+            enemy.gameObject.GetComponent<EnemyCombatAI>().GotHit(attackDamage);
 
         }
 

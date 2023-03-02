@@ -8,7 +8,7 @@ public class EnemyHealthbarUI : HealthbarUI
     protected override void OnEnable()
     {
         base.OnEnable();
-        character.GetComponent<EnemyFXController>().enemyFallEvent += EnemyFallEvent;
+        character.GetComponent<EnemyAnimationsAndFXController>().enemyFallEvent += EnemyFallEvent;
     }
 
     private void EnemyFallEvent()
@@ -22,6 +22,6 @@ public class EnemyHealthbarUI : HealthbarUI
     protected override void OnDisable()
     {
         base.OnDisable();
-        character.GetComponent<EnemyFXController>().enemyFallEvent -= EnemyFallEvent;
+        character.GetComponent<EnemyAnimationsAndFXController>().enemyFallEvent -= EnemyFallEvent;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System;
 
-public class EnemyAI : Character
+public class EnemyMovementAI : Character
 {
     [SerializeField] LayerMask playerMask;
     [SerializeField] LayerMask obstacleMask;
@@ -23,7 +23,7 @@ public class EnemyAI : Character
     List<Transform> waypoints;
     Transform player;
     NavMeshAgent navMeshAgent;
-    EnemyCombat enemyCombat;
+    EnemyCombatAI EnemyCombatAI;
 
     public event Action walk;
     public event Action idle;
@@ -44,7 +44,7 @@ public class EnemyAI : Character
 
     private void OnEnable()
     {
-        GetComponent<EnemyFXController>().isBusy += AnimationPlaying;
+        GetComponent<EnemyAnimationsAndFXController>().isBusy += AnimationPlaying;
         GetComponent<Health>().deathEvent += Die;
 
     }
@@ -53,7 +53,7 @@ public class EnemyAI : Character
     {
         SetState(state.idle);
         navMeshAgent = GetComponent<NavMeshAgent>();
-        enemyCombat = GetComponent<EnemyCombat>();
+        EnemyCombatAI = GetComponent<EnemyCombatAI>();
 
         destinationWaypointIndex = 0;
         navMeshAgent.autoBraking = true;
@@ -167,7 +167,7 @@ public class EnemyAI : Character
                 {
                     Stop();
                     reachedPlayer = true;
-                    enemyCombat.EngageInCombat();
+                    EnemyCombatAI.EngageInCombat();
                 }
             }
         }
@@ -228,7 +228,7 @@ public class EnemyAI : Character
     bool IsInMeleeRangeOf(Transform target)
     {
         float distance = Vector3.Distance(transform.position, target.position);
-        return distance < enemyCombat.GetAttackRange();
+        return distance < EnemyCombatAI.GetAttackRange();
     }
 
     void RotateTowards(Transform target)
@@ -243,7 +243,7 @@ public class EnemyAI : Character
 
             
             base.Die();
-            GetComponent<EnemyAI>().enabled = false;
+            GetComponent<EnemyMovementAI>().enabled = false;
             GetComponent<NavMeshAgent>().enabled = false;
             GetComponent<CapsuleCollider>().enabled = false;
 
@@ -275,7 +275,7 @@ public class EnemyAI : Character
 
     private void OnDisable()
     {
-        GetComponent<EnemyFXController>().isBusy -= AnimationPlaying;
+        GetComponent<EnemyAnimationsAndFXController>().isBusy -= AnimationPlaying;
         GetComponent<Health>().deathEvent -= Die;
 
 

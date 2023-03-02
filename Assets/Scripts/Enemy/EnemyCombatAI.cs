@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EnemyCombat : Combat
+public class EnemyCombatAI : Combat
 {
     [SerializeField] int attackDamage = 20;
     [SerializeField] float attackRange = 2f;
     [SerializeField] float attackCooldownTime = 2f;
-    [SerializeField] float attackAnimationDelay;
 
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask playerLayer;

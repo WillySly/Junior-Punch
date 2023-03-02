@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EnemyFXController : MonoBehaviour
+public class EnemyAnimationsAndFXController : MonoBehaviour
 {
 
     [SerializeField] AudioSource walkSound, runSound;
@@ -23,18 +23,17 @@ public class EnemyFXController : MonoBehaviour
     public event Action<bool> isBusy;
 
 
-
     void OnEnable()
     {
         GetComponent<Health>().deathEvent += PlayEnemyDyingSounds;
         GetComponent<Combat>().hitEvent += Hit;
-        EnemyCombat.enemyAttackEvent += Attack;
-        EnemyCombat.strikeEvent += ReachHand;
+        EnemyCombatAI.enemyAttackEvent += Attack;
+        EnemyCombatAI.strikeEvent += ReachHand;
         GetComponent<Combat>().gotHitEvent += GotHit;
-        GetComponent<EnemyAI>().walk += Walk;
-        GetComponent<EnemyAI>().idle += Idle;
-        GetComponent<EnemyAI>().chase += Chase;
-        GetComponent<EnemyAI>().engageInCombat += EngageInCombat;
+        GetComponent<EnemyMovementAI>().walk += Walk;
+        GetComponent<EnemyMovementAI>().idle += Idle;
+        GetComponent<EnemyMovementAI>().chase += Chase;
+        GetComponent<EnemyMovementAI>().engageInCombat += EngageInCombat;
 
     }
 
@@ -158,13 +157,13 @@ public class EnemyFXController : MonoBehaviour
     {
         GetComponent<Health>().deathEvent -= PlayEnemyDyingSounds;
         GetComponent<Combat>().hitEvent -= Hit;
-        EnemyCombat.enemyAttackEvent -= Attack;
-        EnemyCombat.strikeEvent -= ReachHand;
+        EnemyCombatAI.enemyAttackEvent -= Attack;
+        EnemyCombatAI.strikeEvent -= ReachHand;
         GetComponent<Combat>().gotHitEvent -= GotHit;
-        GetComponent<EnemyAI>().walk -= Walk;
-        GetComponent<EnemyAI>().idle -= Idle;
-        GetComponent<EnemyAI>().chase -= Chase;
-        GetComponent<EnemyAI>().engageInCombat -= EngageInCombat;
+        GetComponent<EnemyMovementAI>().walk -= Walk;
+        GetComponent<EnemyMovementAI>().idle -= Idle;
+        GetComponent<EnemyMovementAI>().chase -= Chase;
+        GetComponent<EnemyMovementAI>().engageInCombat -= EngageInCombat;
 
     }
 

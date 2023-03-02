@@ -56,7 +56,7 @@ public class EnemySpawner : ScriptableObject
         if (timer <= 0)
         {
             enemyInstance = Instantiate(enemyPrefab, new Vector3(xPos, floorLevel, zPos), Quaternion.identity);
-            enemyInstance.GetComponent<EnemyAI>().SetWaypoints(waypointList);
+            enemyInstance.GetComponent<EnemyMovementAI>().SetWaypoints(waypointList);
             timer = spawnDelay;
         }
     }
