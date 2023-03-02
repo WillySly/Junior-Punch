@@ -23,6 +23,11 @@ public class PlayerFXController : MonoBehaviour
         PlayerCombat.playerKickEvent += Kick;
         GetComponent<Combat>().gotHitEvent += GotHit;
 
+        GetComponent<PlayerController>().walk += Walk;
+        GetComponent<PlayerController>().run += Run;
+        GetComponent<PlayerController>().stopMoving += StopMoving;
+        GetComponent<PlayerController>().stopRunning += StopRunning;
+
     }
 
     public void Walk()
@@ -111,6 +116,11 @@ public class PlayerFXController : MonoBehaviour
         GetComponent<Combat>().hitEvent -= Strike;
         PlayerCombat.playerKickEvent -= Kick;
         GetComponent<Combat>().gotHitEvent -= GotHit;
+
+        GetComponent<PlayerController>().walk -= Walk;
+        GetComponent<PlayerController>().run -= Run;
+        GetComponent<PlayerController>().stopMoving -= StopMoving;
+        GetComponent<PlayerController>().stopRunning -= StopRunning;
     }
 
 }

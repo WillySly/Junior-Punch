@@ -10,18 +10,24 @@ public class PlayerController : Character
     [SerializeField] float walkingSpeed = 10;
     [SerializeField] int runningFactor = 3;     // running speed multiplier
     [SerializeField] TMP_Text charName;
+    [SerializeField] GameObject gameOverCanvas;
 
-    PlayerFXController FXController;
+    public event Action walk;
+    public event Action stopMoving;
+    public event Action run;
+    public event Action stopRunning;
 
     string playerName = "Duffy the Skeleton Slaya";
-    [SerializeField] GameObject gameOverCanvas;
 
     float cameraMouseDistanceFactor = 3f; // safeguard for mouse/camera overlap
     bool rotate = true; // mouse over player hover flag
 
+    private void OnEnable()
+    {
+        GetComponent<Health>().deathEvent += Die;
+    }
     void Start()
     {
-        FXController = GetComponent<PlayerFXController>();
         charName.text = playerName;
     }
 
@@ -41,24 +47,24 @@ public class PlayerController : Character
 
         if (moveHorizontally != 0 || moveVertically != 0)
         {
-            FXController.Walk();
+            walk?.Invoke();
             transform.position += new Vector3(moveHorizontally, 0, moveVertically);
         }
         else
         {
-            FXController.StopMoving();
+            stopMoving?.Invoke();
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             walkingSpeed *= runningFactor;
-            FXController.Run();
+            run?.Invoke();
 
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             walkingSpeed /= runningFactor;
-            FXController.StopRunning();
+            stopRunning?.Invoke();
 
         }
 
@@ -112,7 +118,10 @@ public class PlayerController : Character
         gameOverCanvas.SetActive(true);
     }
 
-
+    private void OnDisable()
+    {
+        GetComponent<Health>().deathEvent -= Die;
+    }
 }
 
 

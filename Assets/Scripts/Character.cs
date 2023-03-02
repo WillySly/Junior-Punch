@@ -7,12 +7,10 @@ public class Character : MonoBehaviour
 {
     [SerializeField] float disappearDelay = 5f;
 
-    private void OnEnable()
-    {
-        GetComponent<Health>().deathEvent += Die;
-    }
+
     protected virtual void Die()
     {
+        Debug.Log("die");
         GetComponent<Collider>().enabled = false;
     }
 
@@ -20,7 +18,9 @@ public class Character : MonoBehaviour
     {
         
         yield return new WaitForSeconds(disappearDelay);
+        Debug.Log("gonna destriy now");
         Destroy(gameObject);
+
     }
 
     private void OnDisable()

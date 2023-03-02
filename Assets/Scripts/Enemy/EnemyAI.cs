@@ -45,6 +45,7 @@ public class EnemyAI : Character
     private void OnEnable()
     {
         GetComponent<EnemyFXController>().isBusy += AnimationPlaying;
+        GetComponent<Health>().deathEvent += Die;
 
     }
 
@@ -240,12 +241,15 @@ public class EnemyAI : Character
     protected override void Die()
     {
 
+            
             base.Die();
             GetComponent<EnemyAI>().enabled = false;
             GetComponent<NavMeshAgent>().enabled = false;
             GetComponent<CapsuleCollider>().enabled = false;
 
-            StartCoroutine(Disappear());
+        Debug.Log("died");
+        
+        StartCoroutine(Disappear());
         
     }
 
@@ -272,6 +276,8 @@ public class EnemyAI : Character
     private void OnDisable()
     {
         GetComponent<EnemyFXController>().isBusy -= AnimationPlaying;
+        GetComponent<Health>().deathEvent -= Die;
+
 
     }
 }

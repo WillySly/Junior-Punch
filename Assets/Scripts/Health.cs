@@ -33,9 +33,11 @@ public class Health : MonoBehaviour
         health -= points;
 
         updateHealthEvent?.Invoke(health);
-
+        Debug.Log("got hit in health");
         if (health <= 0)
         {
+            Debug.Log("invoking death event");
+
             deathEvent?.Invoke();
             deathStaticEvent?.Invoke();
         }

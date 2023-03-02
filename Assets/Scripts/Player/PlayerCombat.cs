@@ -30,7 +30,6 @@ public class PlayerCombat : Combat
 
     public void PlayerHitEvent()
     {
-        Debug.Log("PlayerHitEvent");
         Collider[] enemies = Physics.OverlapSphere(attackPoint.position, attackPointRadius, enemyLayer);
 
         foreach (Collider enemy in enemies)
